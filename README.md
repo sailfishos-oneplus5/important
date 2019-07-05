@@ -1,77 +1,15 @@
 # Important
 A collective repository for all the important things related to this SFOS port
 
-### Table of Contents
-* [Building from source](#building-from-source)  
-* [Releases](../../releases)
-* [Issues](../../issues)
+## Issues
+
+If you've found a bug on a release build, in the build process (regarding my guide) or would like to have a public convo about something SFOS related, go ahead and [create a new issue](../../issues)!
+
+## Releases
+
+I will add releases occasionally to [their dedicated page](../../releases) on this repo. If you just want notifications about new releases, feel free to adjust this [repo's notification settings](https://help.github.com/en/articles/watching-and-unwatching-releases-for-a-repository) for yourself
 
 ## Building from source
-You will need a Linux environment for building the Sailfish OS source code, related packages and LineageOS HAL side + around 50 GB of free space on top of that to comfortably build everything without issues.
+This guide expects an x86-based Linux environment for building the Sailfish OS source code, related packages and LineageOS HAL side + around 50 GB of free space on top of that to comfortably build everything without issues.
 
-The ideal situation would be creating another user just for building and to keep the environment consistent:
-```
-HOST $ sudo useradd porter -s /bin/bash -m -G wheel -c "SFOS Builder"
-HOST $ sudo passwd porter
-HOST $ su porter
-```
-To finalize the host environment for building you'll need the following changes made:
-
-Append to `~/.bashrc`:
-```bash
-# ...
-shopt -s histappend
-export HISTCONTROL=ignoreboth
-export HISTSIZE=1000
-export PATH=$HOME/.local/bin:$HOME/bin:$PATH
-export PLATFORM_SDK_ROOT="/srv/mer"
-export ANDROID_ROOT="$HOME/Sailfish/src"
-alias sfossdk="$PLATFORM_SDK_ROOT/sdks/sfossdk/mer-sdk-chroot"
-if [ ! -d /parentroot ]; then
-    export HISTFILE="$HOME/.bash_history"
-else
-    env="sfossdk"
-    [ -d /parentroot/parentroot ] && env="habuild"
-    [ "$env" = "sfossdk" ] && alias habuild="ubu-chroot -r $PLATFORM_SDK_ROOT/sdks/ubuntu"
-    export HISTFILE="$HOME/.bash_history-$env"
-fi
-```
-Create `~/.hadk.env`:
-```bash
-export PLATFORM_SDK_ROOT="/srv/mer"
-export ANDROID_ROOT="$HOME/Sailfish/src"
-export VENDOR="oneplus"
-export DEVICE="cheeseburger"
-export PORT_ARCH="armv7hl"
-
-echo "$ export LANG=C LC_ALL=POSIX"
-export LANG=C LC_ALL=POSIX
-echo "$ cd \$ANDROID_ROOT"
-cd $ANDROID_ROOT
-```
-Create `~/.mersdkubu.profile`:
-```bash
-function hadk() { source $HOME/.hadk.env; echo "Env setup for $DEVICE"; }
-export PS1="HABUILD_SDK [\${DEVICE}] $PS1"
-hadk
-
-if [ -f build/envsetup.sh ]; then
-    echo "$ source build/envsetup.sh"
-    source build/envsetup.sh
-    echo "$ breakfast cheeseburger"
-    breakfast cheeseburger
-    echo "$ export USE_CCACHE=1"
-    export USE_CCACHE=1
-fi
-```
-Create `~/.mersdk.profile`:
-```bash
-PS1="PlatformSDK $PS1"
-[ -d /etc/bash_completion.d ] && for i in /etc/bash_completion.d/*; do . $i; done
-
-function hadk() { source $HOME/.hadk.env; echo "Env setup for $DEVICE"; }
-hadk
-```
-
-
-### Setting up the Platform SDK
+When these basic requirements are met, you can move onto the [initial building guide](INITIAL-BUILDING.md) and go on from there.
