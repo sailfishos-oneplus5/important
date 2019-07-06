@@ -168,6 +168,6 @@ rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/mer-hybris
 
 rpm/dhd/helpers/build_packages.sh -c
 ```
-**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://github.com/sailfishos-oneplus5/droidmedia/releases/latest) and [AUDIOFLINGERGLUE_VERSION](https://github.com/sailfishos-oneplus5/audioflingerglue/releases) values with their latest versions if they are different different.
+**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://github.com/sailfishos-oneplus5/droidmedia/releases/latest) and [AUDIOFLINGERGLUE_VERSION](https://github.com/mer-hybris/audioflingerglue/releases) values with their latest versions if they are different different.
 
 Once you're done you can check out [building the SFOS rootfs](BUILDING.md#building-the-sfos-rootfs) over on the [regular building guide](BUILDING.md).
