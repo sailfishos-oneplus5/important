@@ -10,7 +10,7 @@
 
 When starting out, the ideal situation would be creating another user just for building to keep the environment consistent:
 ```
-HOST $ sudo useradd porter -s /bin/bash -G wheel -c "SFOS Builder"
+HOST $ sudo useradd porter -s /bin/bash -m -G wheel -c "SFOS Builder"
 HOST $ sudo passwd porter
 HOST $ su porter
 HOST $ cd
