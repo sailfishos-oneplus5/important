@@ -139,13 +139,15 @@ HA_BUILD $ git config --global user.email "your@email.com"
 
 ### Initializing local repo
 
-When everything is ready to go let's finally init the local source repository:
+When everything is ready to go we can finally init the local source repository:
 ```
 HA_BUILD $ cd $ANDROID_ROOT
 HA_BUILD $ repo init -u git://github.com/mer-hybris/android.git -b hybris-15.1 --depth 1
 HA_BUILD $ cd .repo/
 HA_BUILD $ git clone https://github.com/sailfishos-oneplus5/local_manifests.git -b hybris-15.1
 HA_BUILD $ sed -i "/hybris-boot/d" manifest.xml
+HA_BUILD $ sed -i "/droidmedia/d" manifest.xml
+HA_BUILD $ sed -i "/audioflingerglue/d" manifest.xml
 HA_BUILD $ cd -
 ```
 
