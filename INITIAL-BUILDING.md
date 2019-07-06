@@ -148,7 +148,7 @@ exit
 
 PLATFORM_SDK $
 
-DROIDMEDIA_VERSION=0.20190706.0
+DROIDMEDIA_VERSION=0.20190707.0
 rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION
 mkdir -p hybris/mw/droidmedia-localbuild/rpm
 cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
@@ -165,6 +165,8 @@ sed -ie "s/0.0.0/$AUDIOFLINGERGLUE_VERSION/" hybris/mw/audioflingerglue-localbui
 mv hybris/mw/audioflingerglue-$AUDIOFLINGERGLUE_VERSION.tgz hybris/mw/audioflingerglue-localbuild
 rpm/dhd/helpers/build_packages.sh --build=hybris/mw/audioflingerglue-localbuild
 rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/mer-hybris/pulseaudio-modules-droid-glue.git
+
+rpm/dhd/helpers/build_packages.sh -c
 ```
 **NOTE:** Please substitute [DROIDMEDIA_VERSION](https://github.com/sailfishos-oneplus5/droidmedia/releases/latest) and [AUDIOFLINGERGLUE_VERSION](https://github.com/sailfishos-oneplus5/audioflingerglue/releases) values with their latest versions if they are different different.
 
