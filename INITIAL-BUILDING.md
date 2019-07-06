@@ -3,6 +3,7 @@
 ### Table of Contents
 * [Starting from ground zero](#starting-from-ground-zero)
 * [Setup the Platform SDK](#setup-the-platform-sdk)
+* [Adding SFOS build target](#adding-sfos-build-target)
 * [Setup the HABUILD SDK](#setup-the-habuild-sdk)
 * [Initializing local repo](#initializing-local-repo)
 
@@ -101,6 +102,22 @@ PLATFORM_SDK $ sudo zypper ref
 PLATFORM_SDK $ sudo zypper --non-interactive in android-tools-hadk
 ```
 
+### Adding SFOS build target
+
+In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To set it up, the following set of commands should be run:
+```
+PLATFORM_SDK $ sudo zypper --non-interactive in gcc
+PLATFORM_SDK $ RELEASE=`cat /etc/os-release | grep VERSION_ID | cut -d'=' -f2`
+PLATFORM_SDK $ sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
+```
+
+To verify that the install succeeded, executing `sdk-assistant list` should yield something like this:
+```
+PLATFORM_SDK $ sdk-assistant list
+SailfishOS-3.0.3.9
+`-oneplus-cheeseburger-armv7hl
+```
+
 ### Setup the HABUILD SDK
 
 Next we'll pull down & extract the Ubuntu 14.04 chroot environment where LineageOS HAL parts shall be built:
@@ -129,7 +146,7 @@ HA_BUILD $ repo init -u git://github.com/mer-hybris/android.git -b hybris-15.1 -
 HA_BUILD $ cd .repo/
 HA_BUILD $ git clone https://github.com/sailfishos-oneplus5/local_manifests.git -b hybris-15.1
 HA_BUILD $ sed -i "/hybris-boot/d" manifest.xml
-HA_BUILD $ exit
+HA_BUILD $ cd -
 ```
 
 Now that the repo is initialized you can start following the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.
