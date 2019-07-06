@@ -10,7 +10,7 @@
 
 When starting out, the ideal situation would be creating another user just for building to keep the environment consistent:
 ```
-HOST $ sudo useradd porter -s /bin/bash -m -G wheel -c "SFOS Builder"
+HOST $ sudo useradd porter -s /bin/bash -G wheel -c "SFOS Builder"
 HOST $ sudo passwd porter
 HOST $ su porter
 HOST $ cd
@@ -114,7 +114,7 @@ PLATFORM_SDK $ sudo sed -i "s/\tlocalhost/\t$(</parentroot/etc/hostname)/g" $UBU
 PLATFORM_SDK $ habuild
 ```
 
-When pulling down large amounts of source code using it is a good idea to configure git as to not limit our available resources and cause other issues:
+When pulling down large amounts of source code it is a good idea to configure git as to not limit our available resources and cause other issues:
 ```
 HA_BUILD $ git config --global user.name "Your Name"
 HA_BUILD $ git config --global user.email "your@email.com"
