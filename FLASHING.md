@@ -4,7 +4,7 @@ This is the initial version of the flashing guide. It will most likely become wa
 ### Table of Contents
 * [Unlocking the device](#unlocking-the-device)
 * [Verifying Treble support](#verifying-treble-support)
-* [Downgrading firmware & TWRP](#downgrading-firmware-&-twrp)
+* [Downgrading firmware & TWRP](#downgrading-firmware-twrp)
 * [Pre-flash actions](#pre-flash-actions)
 * [Flashing ZIPs](#flashing-zips)
 * [Post-flash actions](#post-flash-actions)
@@ -27,7 +27,7 @@ Download one of the following TWRP images depending on your current Android vers
 
 Installing is done by simply executing `fastboot flash recovery /path/to/twrp.img`.
 
-## Downgrading firmware & TWRP
+## Downgrading firmware & TWRP<a name="downgrading-firmware-twrp"></a>
 When using Sailfish OS the current port expects the phone to have Android 8 firmware, so most likely downgrading via TWRP will be required.
 
 1. Fetch the files for [latest OxygenOS 8.1 firmware](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/firmware/firmware_5.1.7_oneplus5.zip/download) and the [TWRP](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/recovery/twrp-3.2.1-0-20180414-codeworkx-cheeseburger.img/download) build we'll be using.
