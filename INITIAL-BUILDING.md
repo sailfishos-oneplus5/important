@@ -6,6 +6,7 @@
 * [Adding SFOS build target](#adding-sfos-build-target)
 * [Setup the HABUILD SDK](#setup-the-habuild-sdk)
 * [Initializing local repo](#initializing-local-repo)
+* [Fixing build_packages](#fixing-build_packages)
 * [Building droidmedia & audioflingerglue](#building-droidmedia-audioflingerglue)
 
 ## Starting from ground zero
@@ -108,16 +109,35 @@ repo init -u git://github.com/mer-hybris/android.git -b hybris-15.1 --depth 1
 cd .repo/
 sed -i "/hybris-boot/d" manifest.xml
 sed -i "/droidmedia/d" manifest.xml
-sed -i "/audioflingerglue/d" manifest.xml
 git clone https://github.com/sailfishos-oneplus5/local_manifests.git -b hybris-15.1
 cd -
 ```
 
 Now that the repo is initialized you can start following the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.
 
+## Fixing build_packages
+
+[Upstream](https://github.com/mer-hybris/) [`ofono-ril-binder-plugin`](https://github.com/mer-hybris/ofono-ril-binder-plugin) since the start of July 2019 now requires newer versions of some packages than are provided by Sailfish packages. To remedy this we'll downgrade the package to the last version with approperiate pkg version dependencies:
+```
+PLATFORM_SDK $
+
+cd hybris/mw/
+rm -rf ofono-ril-binder-plugin*
+git clone https://github.com/sailfishos-oneplus5/ofono-ril-binder-plugin.git -b fix-build
+```
+
+Another issue is [`ofono-configs`](https://git.io/fjik8) (which are provided by [sparse files](https://git.io/fjKXf) in [dcd](https://git.io/fjiIU)). Thankfully it's a simple fix:
+```
+PLATFORM_SDK $
+
+rpm/dhd/helpers/build_packages.sh -c
+sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -R -m sdk-install zypper in droid-config-cheeseburger
+cd -
+```
+
 ## Building droidmedia & audioflingerglue<a name="building-droidmedia-audioflingerglue"></a>
 
-These 2 packages are not in the build by default (with the required patches anyway), so that's what we'll be building next:
+These 2 packages are responsible for (somewhat) fixing video recording and working call audio. They built by default, so that's what we'll be doing next:
 ```
 HA_BUILD $
 
@@ -148,4 +168,4 @@ rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/mer-hybris
 ```
 **NOTE:** Please substitute [DROIDMEDIA_VERSION](https://github.com/sailfishos-oneplus5/droidmedia/releases/latest) and [AUDIOFLINGERGLUE_VERSION](https://github.com/sailfishos-oneplus5/audioflingerglue/releases) values with their latest versions if they are different different.
 
-Next you can move onto [building SFOS packages](BUILDING.md#building-sfos-packages) over on the [regular building guide](BUILDING.md).
+Once you're done you can check out [building the SFOS rootfs](BUILDING.md#building-the-sfos-rootfs) over on the [regular building guide](BUILDING.md).
