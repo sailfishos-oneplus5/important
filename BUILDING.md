@@ -22,6 +22,12 @@ PLATFORM_SDK $ habuild
 HA_BUILD $
 ```
 
+Leaving an environment can be achieved by simply entering `exit` or pressing `CTRL + D`
+```
+HA_BUILD $ exit
+PLATFORM_SDK $
+```
+
 ## Syncing local repository
 
 At this point the process of downloading source code for LineageOS and libhybris will start. At first this may take a while depending on your internet connection speed (with 200 mbit/s it'll take ~10 mins for reference):
