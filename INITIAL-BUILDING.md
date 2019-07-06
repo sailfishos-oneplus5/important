@@ -95,7 +95,7 @@ HOST $ mkdir -p "$ANDROID_ROOT"
 HOST $ sfossdk
 ```
 
-After entering the Platform SDK prompt, we need to pull down a few dependencies
+After entering the Platform SDK prompt, we need to fetch the HADK Android tools for utils such as mkbootimg:
 ```
 PLATFORM_SDK $ sudo zypper ref
 PLATFORM_SDK $ sudo zypper --non-interactive in android-tools-hadk
