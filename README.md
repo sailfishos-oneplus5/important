@@ -11,6 +11,8 @@ My ultimate goal with this project is to port Sailfish OS to the [OnePlus 5](htt
 
 If you've found a bug on a release build, in the build process (regarding my guide) or would like to have a public convo about something SFOS related, go ahead and [create a new issue](../../issues)!
 
+For gathering required report information about crashes, freezes, battery drainage etc and generally debugging hardware / software issues check out the [debugging guide](DEBUGGING.md).
+
 ## Releases
 
 I will add releases occasionally to [their dedicated page](../../releases) on this repo. If you just want notifications about new releases, feel free to adjust this [repo's notification settings](https://help.github.com/en/articles/watching-and-unwatching-releases-for-a-repository) for yourself.
