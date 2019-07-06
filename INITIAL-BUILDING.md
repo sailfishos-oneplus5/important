@@ -6,6 +6,7 @@
 * [Adding SFOS build target](#adding-sfos-build-target)
 * [Setup the HABUILD SDK](#setup-the-habuild-sdk)
 * [Initializing local repo](#initializing-local-repo)
+* [Building droidmedia & audioflingerglue](#building-droidmedia-audioflingerglue)
 
 ## Starting from ground zero
 
@@ -85,7 +86,7 @@ HOST $ chmod a+x ~/bin/repo
 ```
 
 
-### Setup the Platform SDK
+## Setup the Platform SDK
 
 Here's where the magic magic happens in terms of building Sailfish OS itself. To set it up we need to create some initial directories for the SUSE based Platform SDK chroot and extract it:
 ```
@@ -102,7 +103,7 @@ PLATFORM_SDK $ sudo zypper ref
 PLATFORM_SDK $ sudo zypper --non-interactive in android-tools-hadk
 ```
 
-### Adding SFOS build target
+## Adding SFOS build target
 
 In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To set it up, the following set of commands should be run:
 ```
@@ -118,7 +119,7 @@ SailfishOS-3.0.3.9
 `-oneplus-cheeseburger-armv7hl
 ```
 
-### Setup the HABUILD SDK
+## Setup the HABUILD SDK
 
 Next we'll pull down & extract the Ubuntu 14.04 chroot environment where LineageOS HAL parts shall be built:
 ```
@@ -137,18 +138,49 @@ HA_BUILD $ git config --global user.name "Your Name"
 HA_BUILD $ git config --global user.email "your@email.com"
 ```
 
-### Initializing local repo
+## Initializing local repo
 
 When everything is ready to go we can finally init the local source repository:
 ```
 HA_BUILD $ cd $ANDROID_ROOT
 HA_BUILD $ repo init -u git://github.com/mer-hybris/android.git -b hybris-15.1 --depth 1
 HA_BUILD $ cd .repo/
-HA_BUILD $ git clone https://github.com/sailfishos-oneplus5/local_manifests.git -b hybris-15.1
 HA_BUILD $ sed -i "/hybris-boot/d" manifest.xml
 HA_BUILD $ sed -i "/droidmedia/d" manifest.xml
 HA_BUILD $ sed -i "/audioflingerglue/d" manifest.xml
+HA_BUILD $ git clone https://github.com/sailfishos-oneplus5/local_manifests.git -b hybris-15.1
 HA_BUILD $ cd -
 ```
 
 Now that the repo is initialized you can start following the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.
+
+## Building droidmedia & audioflingerglue<a name="building-droidmedia-audioflingerglue"></a>
+
+These 2 packages are not in the build by default (with the required patches anyway), so that's what we'll be building next:
+```
+HA_BUILD $ gettargetarch > lunch_arch
+HA_BUILD $ make -j`nproc` $(external/droidmedia/detect_build_targets.sh $PORT_ARCH)
+HA_BUILD $ make -j`nproc` $(external/audioflingerglue/detect_build_targets.sh $PORT_ARCH)
+HA_BUILD $ exit
+
+PLATFORM_SDK $ DROIDMEDIA_VERSION=0.20190706.0
+PLATFORM_SDK $ rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION
+PLATFORM_SDK $ mkdir -p hybris/mw/droidmedia-localbuild/rpm
+PLATFORM_SDK $ cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
+PLATFORM_SDK $ sed -ie "s/0.0.0/$DROIDMEDIA_VERSION/" hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
+PLATFORM_SDK $ mv hybris/mw/droidmedia-$DROIDMEDIA_VERSION.tgz hybris/mw/droidmedia-localbuild
+PLATFORM_SDK $ rpm/dhd/helpers/build_packages.sh --build=hybris/mw/droidmedia-localbuild
+rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/sailfishos/gst-droid.git
+
+PLATFORM_SDK $ AUDIOFLINGERGLUE_VERSION=0.0.12
+PLATFORM_SDK $ rpm/dhd/helpers/pack_source_audioflingerglue-localbuild.sh $AUDIOFLINGERGLUE_VERSION
+PLATFORM_SDK $ mkdir -p hybris/mw/audioflingerglue-localbuild/rpm
+PLATFORM_SDK $ cp rpm/dhd/helpers/audioflingerglue-localbuild.spec hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
+PLATFORM_SDK $ sed -ie "s/0.0.0/$AUDIOFLINGERGLUE_VERSION/" hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
+PLATFORM_SDK $ mv hybris/mw/audioflingerglue-$AUDIOFLINGERGLUE_VERSION.tgz hybris/mw/audioflingerglue-localbuild
+PLATFORM_SDK $ rpm/dhd/helpers/build_packages.sh --build=hybris/mw/audioflingerglue-localbuild
+PLATFORM_SDK $ rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/mer-hybris/pulseaudio-modules-droid-glue.git
+```
+**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://github.com/sailfishos-oneplus5/droidmedia/releases/latest) and [AUDIOFLINGERGLUE_VERSION](https://github.com/sailfishos-oneplus5/audioflingerglue/releases) values with their latest versions if they are different different.
+
+Next you can move onto [building SFOS packages](BUILDING.md#building-sfos-packages) over on the [regular building guide](BUILDING.md).
