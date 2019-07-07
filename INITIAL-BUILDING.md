@@ -23,10 +23,10 @@ cd
 
 To make the host environment suitable for building you'll need the following changes made:
 
-1. [Append these lines to your `~/.bashrc`](.bashrc)
-2. [Create a `~/.hadk.env` with the following content](.hadk.env)
-3. [Create a `~/.mersdkubu.profile` with the following content](.mersdkubu.profile)
-4. [Create a `~/.mersdk.profile` with the following content](.mersdk.profile)
+1. [Append these lines to your `~/.bashrc`](files/.bashrc)
+2. [Create a `~/.hadk.env` with the following content](files/.hadk.env)
+3. [Create a `~/.mersdkubu.profile` with the following content](files/.mersdkubu.profile)
+4. [Create a `~/.mersdk.profile` with the following content](files/.mersdk.profile)
 5. Get the `repo` command:
 ```
 HOST $
