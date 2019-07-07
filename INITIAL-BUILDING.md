@@ -42,7 +42,7 @@ Here's where the magic magic happens in terms of building Sailfish OS itself. To
 ```
 HOST $
 
-sudo mkdir -p "$PLATFORM_SDK_ROOT/{targets,toolings}" "$PLATFORM_SDK_ROOT/sdks/sfossdk"
+sudo mkdir -p $PLATFORM_SDK_ROOT/{targets,toolings,sdks/sfossdk}
 cd && curl -k -O http://releases.sailfishos.org/sdk/installers/latest/Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2
 sudo tar --numeric-owner -p -xjf Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2 -C $PLATFORM_SDK_ROOT/sdks/sfossdk
 mkdir -p "$ANDROID_ROOT"
