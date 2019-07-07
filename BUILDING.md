@@ -45,12 +45,12 @@ HA_BUILD $ . build/envsetup.sh && breakfast cheeseburger && export USE_CCACHE=1 
 
 ## Building HAL parts
 
-Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 20 minutes on 4 relatively fast CPU cores (i5-4690K) for the first time. To start the process, enter:
+Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 25 minutes on 4 relatively fast CPU cores (i5-4690K) for the first time. To start the process, enter:
 ```
 HA_BUILD $ make -j`nproc` hybris-hal
 ```
 
-During the `hybris-hal` build process a `hybris-boot.img` boot image in `out/` will be generated. When kernel or Android side changes are done afterwards the image can be regenerated using a command:
+During the `hybris-hal` build process a `hybris-boot.img` boot image in `out/target/product/cheeseburger/` will be generated. When kernel and other Android side changes are done afterwards the image can be regenerated using:
 ```
 HA_BUILD $ make -j`nproc` hybris-boot
 ```
@@ -86,7 +86,9 @@ sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEV
 
 ## Building the SFOS rootfs
 
-This is the final step in building stuff. Please define `RELEASE` as latest public build from the [version history](https://en.wikipedia.org/wiki/Sailfish_OS#Version_history). At the time of writing it was `3.0.3.10`. After this you should have a flashable Sailfish OS zip in `sfe-cheeseburger-*/`:
+This is the final step in building stuff. Please define `RELEASE` as latest public build from the [version history](https://en.wikipedia.org/wiki/Sailfish_OS#Version_history). At the time of writing this would have been `3.0.3.10`.
+
+After this you should have a flashable Sailfish OS zip in `sfe-cheeseburger-*/`:
 ```
 PLATFORM_SDK $
 
