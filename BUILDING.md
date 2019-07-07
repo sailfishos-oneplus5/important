@@ -86,7 +86,7 @@ sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEV
 
 ## Building the SFOS rootfs
 
-This is the final step in building stuff. Please define `RELEASE` as latest public build from the [version history](https://en.wikipedia.org/wiki/Sailfish_OS#Version_history). At the time of writing it was `3.0.3.10`. After this you should have a flashable Sailfish OS zip in `out/`:
+This is the final step in building stuff. Please define `RELEASE` as latest public build from the [version history](https://en.wikipedia.org/wiki/Sailfish_OS#Version_history). At the time of writing it was `3.0.3.10`. After this you should have a flashable Sailfish OS zip in `sfe-cheeseburger-*/`:
 ```
 PLATFORM_SDK $
 
@@ -94,4 +94,4 @@ RELEASE=3.0.3.10
 hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh
 sudo mic create fs --arch=$PORT_ARCH --tokenmap=ARCH:$PORT_ARCH,RELEASE:$RELEASE,EXTRA_NAME:$EXTRA_NAME --record-pkgs=name,url --outdir=sfe-$DEVICE-$RELEASE$EXTRA_NAME --pack-to=sfe-$DEVICE-$RELEASE$EXTRA_NAME.tar.bz2 $ANDROID_ROOT/Jolla-@RELEASE@-$DEVICE-@ARCH@.ks
 ```
-Hooray! You've now successfully fully built all of the Sailfish OS source code into a rather tiny (~350 MB) zip file! Look into the [flashing guide](FLASHING.md) on how to proceed.
+Hooray! You've now successfully fully built all of the Sailfish OS source code into a rather tiny (~350 MB) flashable zip file! Look into the [flashing guide](FLASHING.md) on how to proceed.
