@@ -57,7 +57,7 @@ Password:
 ## Gathering logs
 In terms of content `journalctl` is the most important as it has pretty much everything you'd want in a log:
 ```
-DEVICE # journalctl -b --no-pager > /sdcard/journalctl.log
+DEVICE # journalctl -b > /sdcard/journalctl.log
 ```
 
 What it doesn't contain is the Android HAL side logs. They can be read via `logcat` as per usual:
