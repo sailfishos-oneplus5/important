@@ -20,7 +20,8 @@ I will add releases occasionally to [their dedicated page](../../releases) on th
 ## Building from source
 The build guide expects an x64-based Linux environment for building the Sailfish OS source code, related packages and LineageOS HAL side + around 50 GB of free space on top of that to comfortably build everything without issues. Also 4+ GB of RAM is required: the more the better.
 
-When these basic requirements are met, you can move onto the [initial building guide](INITIAL-BUILDING.md) and go on from there.
+When these basic requirements are met, you can move onto the [initial building guide](INITIAL-BUILDING.md) and go on from there. 
+If instead you've already built everything once but want to upgrade or test things, the [regular building guide](BUILDING.md) is what you'd be looking for.
 
 The guide has been built with the help of the [HADK](https://sailfishos.org/develop/hadk/), [FAQ](https://public.etherpad-mozilla.org/p/faq-hadk), [IRC logs](https://piggz.co.uk/sailfishos-porters-archive/index.php) & the awesome people at [#sailfishos-porters](https://webchat.freenode.net/#sailfishos-porters).
 
