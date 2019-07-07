@@ -5,6 +5,7 @@
 * [Setup the Platform SDK](#setup-the-platform-sdk)
 * [Adding SFOS build target](#adding-sfos-build-target)
 * [Setup the HABUILD SDK](#setup-the-habuild-sdk)
+* [Cleaning up](#cleaning-up)
 * [Initializing local repo](#initializing-local-repo)
 * [Fixing build_packages](#fixing-build_packages)
 * [Building droidmedia & audioflingerglue](#building-droidmedia-audioflingerglue)
@@ -43,6 +44,7 @@ Here's where the magic magic happens in terms of building Sailfish OS itself. To
 HOST $
 
 sudo mkdir -p $PLATFORM_SDK_ROOT/{targets,toolings,sdks/sfossdk}
+sudo ln -s /srv/mer/sdks/sfossdk/srv/mer/sdks/ubuntu/ /srv/mer/sdks/ubuntu
 cd && curl -k -O http://releases.sailfishos.org/sdk/installers/latest/Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2
 sudo tar --numeric-owner -p -xjf Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2 -C $PLATFORM_SDK_ROOT/sdks/sfossdk
 mkdir -p "$ANDROID_ROOT"
@@ -56,16 +58,13 @@ PLATFORM_SDK $
 sudo zypper ref
 sudo zypper --non-interactive in android-tools-hadk
 ```
+**NOTE:** Repository errors for `adaptation0` can be safely ignored here and in the future.
 
 ## Adding SFOS build target
 
 In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To set it up, the following set of commands should be run:
 ```
-PLATFORM_SDK $
-
-sudo zypper --non-interactive in gcc
-RELEASE=`cat /etc/os-release | grep VERSION_ID | cut -d'=' -f2`
-sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
+PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
 ```
 
 To verify that the install succeeded, executing `sdk-assistant list` should yield something like this:
@@ -82,7 +81,7 @@ Next we'll pull down & extract the Ubuntu 14.04 chroot environment where Lineage
 PLATFORM_SDK $
 
 TARBALL=ubuntu-trusty-20180613-android-rootfs.tar.bz2
-curl -O https://releases.sailfishos.org/ubu/$TARBALL
+cd && curl -O https://releases.sailfishos.org/ubu/$TARBALL
 UBUNTU_CHROOT=$PLATFORM_SDK_ROOT/sdks/ubuntu
 sudo mkdir -p $UBUNTU_CHROOT
 sudo tar --numeric-owner -xjf $TARBALL -C $UBUNTU_CHROOT
@@ -96,6 +95,13 @@ HA_BUILD $
 
 git config --global user.name "Your Name"
 git config --global user.email "your@email.com"
+```
+
+## Cleaning up
+
+Once you can enter both PLATFORM_SDK and HA_BUILD environments, you can safely delete the leftover chroot filesystem archives from your home directory:
+```
+HA_BUILD $ cd && rm Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2 ubuntu-trusty-*-android-rootfs.tar.bz2
 ```
 
 ## Initializing local repo
