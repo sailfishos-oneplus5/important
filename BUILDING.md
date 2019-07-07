@@ -47,17 +47,17 @@ HA_BUILD $ . build/envsetup.sh && breakfast cheeseburger && export USE_CCACHE=1 
 
 Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 25 minutes on 4 relatively fast CPU cores (i5-4690K) for the first time. To start the process, enter:
 ```
-HA_BUILD $ make -j`nproc` hybris-hal
+HA_BUILD $ mka hybris-hal
 ```
 
 During the `hybris-hal` build process a `hybris-boot.img` boot image in `out/target/product/cheeseburger/` will be generated. When kernel and other Android side changes are done afterwards the image can be regenerated using:
 ```
-HA_BUILD $ make -j`nproc` hybris-boot
+HA_BUILD $ mka hybris-boot
 ```
 
 In case a recovery boot image is needed, it can be built like so:
 ```
-HA_BUILD $ make -j`nproc` hybris-recovery
+HA_BUILD $ mka hybris-recovery
 ```
 
 ## Building SFOS packages
