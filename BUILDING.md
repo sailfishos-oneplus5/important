@@ -31,7 +31,9 @@ PLATFORM_SDK $
 
 ## Syncing local repository
 
-At this point the process of downloading source code for LineageOS and libhybris will start. At first this may take a while depending on your internet connection speed (with 200 mbit/s it'll take ~10 mins for reference):
+At this point the process of downloading source code for LineageOS and libhybris will start. This will also be done when updating source code repos.
+
+At first this may take a while depending on your internet connection speed (with 200 mbit/s it'll take ~10 mins for reference):
 ```
 HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-tags --no-clone-bundle
 ```
