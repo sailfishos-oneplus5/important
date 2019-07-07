@@ -113,7 +113,7 @@ git clone https://github.com/sailfishos-oneplus5/local_manifests.git -b hybris-1
 cd -
 ```
 
-Now that the repo is initialized you can start following the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.
+Now that the repo is initialized you can start [syncing the local repository](BUILDING.md#syncing-local-repository) as per the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.
 
 ## Fixing build_packages
 
