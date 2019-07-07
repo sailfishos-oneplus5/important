@@ -5,6 +5,7 @@
 * [Syncing local repository](#syncing-local-repository)
 * [Building HAL parts](#building-hal-parts)
 * [Building SFOS packages](#building-sfos-packages)
+* [Building the SFOS rootfs](#building-the-sfos-rootfs)
 
 ## Build environments
 
@@ -35,14 +36,14 @@ At this point the process of downloading source code for LineageOS and libhybris
 HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-tags --no-clone-bundle
 ```
 
-If this is your first time building, environment variables also need to be set up by executing:
+If this is your first time building, execute the following line to finalize the environment:
 ```
-HA_BUILD $ . build/envsetup.sh && breakfast cheeseburger && export USE_CCACHE=1
+HA_BUILD $ . build/envsetup.sh && breakfast cheeseburger && export USE_CCACHE=1 && rm vendor/lineage/bootanimation/Android.mk
 ```
 
 ## Building HAL parts
 
-Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 30 minutes on 4 relatively fast CPU cores (i5-4690K) for the first time. To start the process, enter:
+Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 20 minutes on 4 relatively fast CPU cores (i5-4690K) for the first time. To start the process, enter:
 ```
 HA_BUILD $ make -j`nproc` hybris-hal
 ```
@@ -57,8 +58,38 @@ In case a recovery boot image is needed, it can be built like so:
 HA_BUILD $ make -j`nproc` hybris-recovery
 ```
 
-If this was your first time building `hybris-hal`, see [building droidmedia & audioflingerglue](https://git.io/fj6j8) under the [initial building guide](INITIAL-BUILDING.md).
-
 ## Building SFOS packages
 
-Coming *very* soon...
+When building for the first time you need to execute a few commands to fix some issues. See [fixing build_packages](INITIAL-BUILDING.md#fixing-build_packages) under the [initial building guide](INITIAL-BUILDING.md) and come back here afterwards.
+
+Sailfish OS packages will need to be built many times during development. To selectively build / rebuild **everything**, run the following command:
+```
+PLATFORM_SDK $ rpm/dhd/helpers/build_packages.sh
+```
+
+**NOTE:** If this was your first time running build_packages, see [building droidmedia & audioflingerglue](INITIAL-BUILDING.md#building-droidmedia-audioflingerglue) under the [initial building guide](INITIAL-BUILDING.md).
+
+When just droid configs have been modified, `rpm/dhd/helpers/build_packages.sh -c` will be enough. Same goes for droid HAL, but with `-d` flag instead.
+
+After building droid configs, you should always regenerate the kickstart file as follows:
+```
+PLATFORM_SDK $
+
+HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@"
+HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@"
+KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks"
+sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS
+```
+
+
+## Building the SFOS rootfs
+
+This is the final step in building stuff. Please define `RELEASE` as latest public build from the [version history](https://en.wikipedia.org/wiki/Sailfish_OS#Version_history). At the time of writing it was `3.0.3.10`. After this you should have a flashable Sailfish OS zip in `out/`:
+```
+PLATFORM_SDK $
+
+RELEASE=3.0.3.10
+hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh
+sudo mic create fs --arch=$PORT_ARCH --tokenmap=ARCH:$PORT_ARCH,RELEASE:$RELEASE,EXTRA_NAME:$EXTRA_NAME --record-pkgs=name,url --outdir=sfe-$DEVICE-$RELEASE$EXTRA_NAME --pack-to=sfe-$DEVICE-$RELEASE$EXTRA_NAME.tar.bz2 $ANDROID_ROOT/Jolla-@RELEASE@-$DEVICE-@ARCH@.ks
+```
+Hooray! You've now successfully fully built all of the Sailfish OS source code into a rather tiny (~350 MB) zip file! Look into the [flashing guide](FLASHING.md) on how to proceed.
