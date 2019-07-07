@@ -2,12 +2,12 @@
 This is the initial version of the debugging guide.
 
 ### Table of Contents
-* [Device reboots to fastboot](device-reboots-to-fastboot)
-* [Can't get past setup / lockscreen](cant-get-past-setup-lockscreen)
-* [Getting telnet](device-doesnt-boot)
-* [Debugging via SSH](debugging-via-ssh)
-* [Gathering logs](gathering-logs)
-* [Transferring logs](transferring-logs)
+* [Device reboots to fastboot](#device-reboots-to-fastboot)
+* [Can't get past setup / lockscreen](#cant-get-past-setup-lockscreen)
+* [Getting telnet](#device-doesnt-boot)
+* [Debugging via SSH](#debugging-via-ssh)
+* [Gathering logs](#gathering-logs)
+* [Transferring logs](#transferring-logs)
 
 ## Device reboots to fastboot
 
@@ -15,7 +15,7 @@ For me this has happened when flashing the wrong LineageOS 15.1 zip. Double-chec
 
 ## Can't get past setup / lockscreen<a href="cant-get-past-setup-lockscreen"></a>
 
-In my experience this usually happens when you **DON'T** flash the LineageOS 15.1 zip before SFOS zip (after already having tested it & wiped everything but `/system`). Please make sure you followed the [flashing guide](FLASHING.md) fully!
+In my experience this usually happens when you **DON'T** flash the LineageOS 15.1 zip before SFOS zip (e.g. after testing everything & wiping all but `/system`). Please make sure you followed the [flashing guide](FLASHING.md) fully!
 
 ## Getting telnet
 You can think of `telnet` as a replacement for the [ADB](https://developer.android.com/studio/command-line/adb) shell. On the host a telnet session can be started by typing:
