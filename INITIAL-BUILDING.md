@@ -150,7 +150,7 @@ sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -R -m sdk-install zypper in bluez5-obexd droid
 
 ## Building droidmedia & audioflingerglue<a name="building-droidmedia-audioflingerglue"></a>
 
-These 2 packages are responsible for (somewhat) fixing video recording and working call audio. They aren't built by default, so that's what we'll be doing next (on my machine this took ~6 mins total):
+These 2 packages are responsible for (somewhat) fixing video recording and working call audio. They aren't built by default, so that's what we'll be doing next (on my machine this process took ~10 mins total):
 ```
 HA_BUILD $
 
