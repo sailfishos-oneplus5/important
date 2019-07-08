@@ -64,14 +64,14 @@ HA_BUILD $ mka hybris-recovery
 
 When building for the first time you need to execute a few commands to fix some issues. See [fixing build_packages](INITIAL-BUILDING.md#fixing-build_packages) under the [initial building guide](INITIAL-BUILDING.md) and come back here afterwards.
 
-Sailfish OS packages will need to be built many times during development. To selectively build / rebuild **everything**, run the following command:
+Sailfish OS packages will need to be built many times during development. To selectively build / rebuild **everything**, run the following command (full build takes ~15 minutes for me):
 ```
 PLATFORM_SDK $ rpm/dhd/helpers/build_packages.sh
 ```
 
 **NOTE:** If this was your first time running build_packages, see [building droidmedia & audioflingerglue](INITIAL-BUILDING.md#building-droidmedia-audioflingerglue) under the [initial building guide](INITIAL-BUILDING.md).
 
-When just droid configs have been modified, `rpm/dhd/helpers/build_packages.sh -c` will be enough. Same goes for droid HAL, but with `-d` flag instead.
+When just droid configs have been modified, `rpm/dhd/helpers/build_packages.sh -c` will be enough. Same goes for droid HAL stuff, but with `-d` flag instead. Building with these flags set will be substantially faster than rebuilding everything.
 
 After building droid configs, you should always regenerate the kickstart file as follows:
 ```
@@ -86,7 +86,7 @@ sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEV
 
 ## Building the SFOS rootfs
 
-This is the final step in building stuff. Please define `RELEASE` as latest public build from the [version history](https://en.wikipedia.org/wiki/Sailfish_OS#Version_history). At the time of writing this would have been `3.0.3.10`.
+This is the final step in building stuff. Please define `RELEASE` as latest public build from the [version history](https://en.wikipedia.org/wiki/Sailfish_OS#Version_history). At the time of writing this would have been `3.0.3.10`. The `mic` build process averages ~7 minutes for me.
 
 After this you should have a flashable Sailfish OS zip in `sfe-cheeseburger-*/`:
 ```
