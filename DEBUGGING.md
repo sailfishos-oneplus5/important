@@ -1,5 +1,4 @@
 # Debugging guide
-This is the initial version of the debugging guide.
 
 ### Table of Contents
 * [Device reboots to fastboot](#device-reboots-to-fastboot)
