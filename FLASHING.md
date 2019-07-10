@@ -14,13 +14,14 @@
 ```cpp
 #include "disclaimer.h"
 /*
- * I am NOT responsible if you destroy your device or for you getting fired because the alarm app failed.
- * Please do some research if you have any concerns about features included in this port and as always:
- * use at your own risk.
+ * I am NOT responsible for you getting fired because the alarm app failed or if you destroy your device.
+ * Please do some research if you have any concerns about features included in this port.
+ * Same security standards as for official Sailfish OS devices may not apply here.
+ * Everything is served on an as-is basis and YOU are choosing to do these modifications.
  */
  ```
 
-**WARNING:** All current data on the device WILL be erased, so be sure to backup before proceeding!
+**WARNING:** All current data on the device WILL be erased, so be sure to make full data & NANDroid backups before proceeding!
 
 ## Unlocking the device
 
