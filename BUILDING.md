@@ -35,12 +35,12 @@ At this point the process of downloading source code for LineageOS and libhybris
 
 At first this may take a while depending on your internet connection speed (with 200 mbit/s it'll take ~10 mins for reference):
 ```
-HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-tags --no-clone-bundle
+HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-tags --no-clone-bundle && rm -rf vendor/lineage/bootanimation/
 ```
 
 If this is your first time building, execute the following line to finalize the environment:
 ```
-HA_BUILD $ . build/envsetup.sh && breakfast cheeseburger && export USE_CCACHE=1 && rm vendor/lineage/bootanimation/Android.mk
+HA_BUILD $ . build/envsetup.sh && breakfast cheeseburger && export USE_CCACHE=1
 ```
 
 ## Building HAL parts
@@ -83,7 +83,6 @@ KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks"
 sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS
 ```
 
-
 ## Building the SFOS rootfs
 
 This is the final step in building stuff. Please define `RELEASE` as latest public build from the [version history](https://en.wikipedia.org/wiki/Sailfish_OS#Version_history). At the time of writing this would have been `3.0.3.10`. The `mic` build process averages ~7 minutes for me.
@@ -97,3 +96,4 @@ hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh
 sudo mic create fs --arch=$PORT_ARCH --tokenmap=ARCH:$PORT_ARCH,RELEASE:$RELEASE,EXTRA_NAME:$EXTRA_NAME --record-pkgs=name,url --outdir=sfe-$DEVICE-$RELEASE$EXTRA_NAME --pack-to=sfe-$DEVICE-$RELEASE$EXTRA_NAME.tar.bz2 $ANDROID_ROOT/Jolla-@RELEASE@-$DEVICE-@ARCH@.ks
 ```
 Hooray! You've now successfully fully built all of the Sailfish OS source code into a rather tiny (~350 MB) flashable zip file! Look into the [flashing guide](FLASHING.md) on how to proceed.
+

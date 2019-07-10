@@ -64,7 +64,7 @@ sudo zypper --non-interactive in android-tools-hadk
 
 In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To set it up, the following set of commands should be run:
 ```
-PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z && echo $USER > BUILD_USER
+PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
 ```
 
 To verify that the install succeeded, executing `sdk-assistant list` should yield something like this:
@@ -87,6 +87,9 @@ sudo mkdir -p $UBUNTU_CHROOT
 sudo tar --numeric-owner -xjf $TARBALL -C $UBUNTU_CHROOT
 sudo sed -i "s/\tlocalhost/\t$(</parentroot/etc/hostname)/g" $UBUNTU_CHROOT/etc/hosts
 cd $ANDROID_ROOT
+curl -L https://git.io/fjPTL > installer-sparse.zip
+unzip installer-sparse.zip -d installer-sparse/
+rm installer-sparse.zip
 habuild
 ```
 
@@ -188,3 +191,4 @@ rpm/dhd/helpers/build_packages.sh -c
 **NOTE:** Please substitute [DROIDMEDIA_VERSION](https://github.com/sailfishos-oneplus5/droidmedia/releases/latest) and [AUDIOFLINGERGLUE_VERSION](https://github.com/mer-hybris/audioflingerglue/releases) values with their latest versions if they are different different.
 
 Once you're done you can check out [building the SFOS rootfs](BUILDING.md#building-the-sfos-rootfs) over on the [regular building guide](BUILDING.md).
+

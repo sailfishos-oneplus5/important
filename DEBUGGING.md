@@ -10,19 +10,21 @@
 
 ## Device reboots to fastboot
 
-For me this has happened when flashing the wrong LineageOS 15.1 zip. Double-check that the zip I've mentioned in the [flashing guide](FLASHING.md#flashing-zips) matches yours unless you know what you are doing!
+For me this has happened when flashing the wrong LineageOS 15.1 zip. Double-check that the zip I've mentioned in the [flashing guide](FLASHING.md#flashing-steps) matches yours unless you know what you are doing!
 
 ## Can't get past setup / lockscreen<a name="cant-get-past-setup-lockscreen"></a>
 
 In my experience this usually happens when you **DON'T** flash the LineageOS 15.1 zip before SFOS zip (e.g. after testing everything & wiping all but `/system`). Please make sure you followed the [flashing guide](FLASHING.md) fully!
 
 ## Getting telnet
+
 You can think of `telnet` as a replacement for the [ADB](https://developer.android.com/studio/command-line/adb) shell. On the host a telnet session can be started by typing:
 ```
 HOST $ telnet 192.168.2.15 2323
 ```
 
 ## Debugging via SSH
+
 Remote debugging is possible via SSH on a local Wi-Fi network. It should be running by default on developer mode, but you'll need some setup:
 ```
 TELNET # passwd nemo
@@ -54,6 +56,7 @@ Password:
 ```
 
 ## Gathering logs
+
 In terms of content `journalctl` is the most important as it has pretty much everything you'd want in a log:
 ```
 DEVICE # journalctl -b > /sdcard/journalctl.log
@@ -83,3 +86,4 @@ logcat.log                                                   100%  491KB   9.6MB
 and also via most of the GUI Linux file managers (Windows requires [an explorer extension](http://swish-sftp.org/) or [a seperate client](https://winscp.net/eng/index.php)).
 
 If nothing else works you can boot the device to TWRP and get the logs from there in whichever way you prefer.
+

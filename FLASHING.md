@@ -1,18 +1,33 @@
 # Flashing guide
-This is the initial version of the flashing guide. It will most likely become way simpler once I figure out some stuff :)
 
 ### Table of Contents
+* [Disclaimer](#disclaimer)
 * [Unlocking the device](#unlocking-the-device)
 * [Verifying Treble support](#verifying-treble-support)
 * [Downgrading firmware & TWRP](#downgrading-firmware-twrp)
-* [Pre-flash actions](#pre-flash-actions)
-* [Flashing ZIPs](#flashing-zips)
-* [Post-flash actions](#post-flash-actions)
+* [Flashing steps](#flashing-steps))
+* [Skipping tutorial](#skipping-tutorial)
+* [Dual-booting with LineageOS](#dual-booting-with-lineageos)
+
+## Disclaimer
+
+```cpp
+#include "disclaimer.h"
+/*
+ * I am NOT responsible if you destroy your device or for you getting fired because the alarm app failed.
+ * Please do some research if you have any concerns about features included in this port and as always:
+ * use at your own risk.
+ */
+ ```
+
+**WARNING:** All current data on the device WILL be erased, so be sure to backup before proceeding!
 
 ## Unlocking the device
+
 Check out [this forum post](https://forums.oneplus.com/threads/guide-oneplus-5-how-to-unlock-bootloader-flash-twrp-root-nandroid-efs-backup-and-more.548216/), rooting can be ignored as the system will be wiped fully anyways afterwards.
 
 ## Verifying Treble support
+
 When booted to TWRP you can verify Treble support via a simple command:
 ```
 ADB_SHELL # [ -r /dev/block/bootdevice/by-name/vendor ] || echo "Treble support NOT present!"
@@ -20,6 +35,7 @@ ADB_SHELL # [ -r /dev/block/bootdevice/by-name/vendor ] || echo "Treble support 
 If it doesn't return anything, move forward. In other cases you need to flash stock [O<sub>2</sub>OS 5.1.5](https://otafsg.h2os.com/patch/amazone2/GLO/OnePlus5Oxygen/OnePlus5Oxygen_23.J.38_GLO_038_1808082017/OnePlus5Oxygen_23_OTA_038_all_1808082017_ebb1d69f37.zip) and do an [OTA update to 5.1.6](http://otafsg1.h2os.com/patch/amazone2/GLO/OnePlus5Oxygen/OnePlus5Oxygen_23.J.39_GLO_039_1810091237/OnePlus5Oxygen_23_OTA_039_all_1810091237_160b.zip) from there.
 
 ## Downgrading firmware & TWRP<a name="downgrading-firmware-twrp"></a>
+
 When using Sailfish OS the current port expects the phone to have Android 8 firmware, so most likely downgrading via TWRP will be required.
 
 1. Fetch the files for [latest O<sub>2</sub>OS 8.1 firmware](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/firmware/firmware_5.1.7_oneplus5.zip/download) and the [TWRP image](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/recovery/twrp-3.2.1-0-20180414-codeworkx-cheeseburger.img/download) we'll be using.
@@ -33,39 +49,24 @@ e2fsck /dev/block/bootdevice/by-name/userdata
 ```
 4. Before rebooting back to recovery make sure to "Format data"!
 
+## Flashing steps
 
-## Pre-flash actions
-Because tar is broken in TWRP's busybox for this device, we'll be working around that by just creating a temporary 12 GB [`swap file`](https://www.linux.com/news/all-about-linux-swap-space):
-```
-ADB_SHELL #
-
-dd if=/dev/zero of=/sdcard/swapfile bs=1M count=12288
-chmod 600 /sdcard/swapfile
-mkswap /sdcard/swapfile
-swapon /sdcard/swapfile
-```
-This file will have to be created/enabled each time before you flash the SFOS zip until I've found a better workaround.
-
-## Flashing ZIPs
 1. Flash [this LineageOS 15.1 zip](https://download.lineage.microg.org/cheeseburger/lineage-15.1-20190225-microG-cheeseburger.zip) (tested by me and known to work)
-2. Flash your desired SFOS zip
+2. Flash your desired SFOS zip (normally takes ~1 min 30 sec)
+3. (Optional) clear caches
+4. Reboot
 
-## Post-flash actions
-Once the zips have flashed successfully, the temporary swapfile can be safely removed:
-```
-ADB_SHELL #
+## Skipping tutorial
 
-swapoff /sdcard/swapfile
-rm /sdcard/swapfile
-```
+Once booted for the first time Sailfish OS will always start off with a tutorial screen. Since you'll likely be flashing zips many times, this will become very annoying rather quickly. You can skip this by tapping each corner of the screen once starting from top-left going clockwise.
 
-There are 2 services (`time_daemon` and `qti`) which both are started by vendor init scripts that cannot be overridden by [sparse files](https://git.io/fji3Y) in [dcd](https://git.io/fji3O) (why?). They don't seem do anything useful under Sailfish, just spam logs like crazy and cause battery drain because they are being restarted every 5-10 seconds (fix?) and I recommend disabling them before booting like so:
-```
-ADB_SHELL #
+## Dual-booting with LineageOS
 
-umount /vendor
-mount -o rw /vendor
-sed -i "s/service qti.*/service qti \/vendor\/bin\/qti_HYBRIS_DISABLED/" /vendor/etc/init/hw/init.qcom.rc
-sed -i "s/service time_daemon.*/service time_daemon \/vendor\/bin\/time_daemon_HYBRIS_DISABLED/" /vendor/etc/init/hw/init.qcom.rc
-```
-After all this I tend to clear caches and reboot to the new SFOS system :)
+What makes SFOS unique as well is that it doesn't actually touch your `/system` partition (and `/vendor` once I figure stuff out :p), which makes it super easy to dual-boot!
+
+The only limitation is that you'll be stuck on LOS 15.1 (Android 8.1 Oreo) unless you want to start flashing different ROMs for when you boot SFOS than Android, which I really cannot recommend.
+
+If you want [full regular GApps](https://opengapps.org/) instead of [MicroG](https://microg.org/), you probably want to flash a different **recent** LOS zip than what I [mention on this guide](#flashing-zips) (I haven't personally tested this but it should work as well).
+
+When you've flashed a Sailfish OS zip you can swap between the operating systems without needing wiping anything by simply flashing my [boot-switcher zip](https://git.io/fjPUq) within TWRP.
+
