@@ -28,3 +28,7 @@ The guide has been built with the help of the [HADK](https://sailfishos.org/deve
 ## Flashing
 
 Once you've got everything built or are flashing a release build, check out the [flashing guide](FLASHING.md) in case you need help.
+
+## Application development
+
+To develop applications for Sailfish OS you'll be using a modified install of [Qt Creator](https://www.qt.io/). The full guide can be found [here](https://sailfishos.org/wiki/Application_SDK).
