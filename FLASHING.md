@@ -5,7 +5,7 @@
 * [Unlocking the device](#unlocking-the-device)
 * [Verifying Treble support](#verifying-treble-support)
 * [Downgrading firmware & TWRP](#downgrading-firmware-twrp)
-* [Flashing steps](#flashing-steps))
+* [Flashing steps](#flashing-steps)
 * [Skipping tutorial](#skipping-tutorial)
 * [Dual-booting with LineageOS](#dual-booting-with-lineageos)
 
