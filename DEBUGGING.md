@@ -85,5 +85,7 @@ logcat.log                                                   100%  491KB   9.6MB
 ```
 and also via most of the GUI Linux file managers (Windows requires [an explorer extension](http://swish-sftp.org/) or [a seperate client](https://winscp.net/eng/index.php)).
 
+**NOTE:** The SSH scp command can also be used over the telnet `192.168.2.15` IP when connected locally!
+
 If nothing else works you can boot the device to TWRP and get the logs from there in whichever way you prefer.
 

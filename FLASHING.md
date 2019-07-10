@@ -39,7 +39,7 @@ If it doesn't return anything, move forward. In other cases you need to flash st
 
 When using Sailfish OS the current port expects the phone to have Android 8 firmware, so most likely downgrading via TWRP will be required.
 
-1. Fetch the files for [latest O<sub>2</sub>OS 8.1 firmware](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/firmware/firmware_5.1.7_oneplus5.zip/download) and the [TWRP image](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/recovery/twrp-3.2.1-0-20180414-codeworkx-cheeseburger.img/download) we'll be using.
+1. Fetch the files for [latest O<sub>2</sub>OS 8.1 firmware](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/firmware/firmware_5.1.7_oneplus5.zip/download) and the [TWRP 3.2.3 image](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/recovery/twrp-3.2.3-0-20180822-codeworkx-cheeseburger.img/download) we'll be using.
 2. Flash the firmware zip first and then TWRP image to Recovery partition.
 3. First time flashers should also check `/data` for filesystem issues (make sure it's formatted as `ext4` beforehand!):
 ```
