@@ -5,6 +5,7 @@
 * [Can't get past setup / lockscreen](#cant-get-past-setup-lockscreen)
 * [Getting telnet](#getting-telnet)
 * [Debugging via SSH](#debugging-via-ssh)
+* [Stracing binaries](#stracing-binaries)
 * [Gathering logs](#gathering-logs)
 * [Transferring logs](#transferring-logs)
 
@@ -55,6 +56,25 @@ Password:
 [root@Sailfish nemo]#
 ```
 
+## Stracing binaries
+
+Using the `strace` command can be beneficial e.g. when dealing with segfaulting or otherwise failing executables. It will print out all system calls and signals the binary attempts to do while running and specifically helps to find missing symlinks & other files.
+
+If a specific command, say `ls /`, fails, a simple strace dump can be made via:
+```
+DEVICE $ strace -f -o /sdcard/strace.log ls /
+```
+
+When an already running process e.g. `ofonod` is say stuck in a loop, it can be straced like so:
+```
+DEVICE $ strace -f -o /sdcard/strace.log -p `pgrep ofonod | head -1`
+```
+
+Same applies for processes with known PIDs:
+```
+DEVICE $ strace -f -o /sdcard/strace.log -p 3714
+```
+
 ## Gathering logs
 
 In terms of content `journalctl` is the most important as it has pretty much everything you'd want in a log:
@@ -70,7 +90,7 @@ DEVICE $ logcat > /sdcard/logcat.log
 
 Another one that could be potentially useful when dealing with kernel related issues is `dmesg`:
 ```
-DEVICE # dmesg > /sdcard/dmesg.log
+DEVICE $ dmesg > /sdcard/dmesg.log
 ```
 
 ## Transferring logs
