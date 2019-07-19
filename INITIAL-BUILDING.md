@@ -8,7 +8,7 @@
 * [Cleaning up](#cleaning-up)
 * [Initializing local repo](#initializing-local-repo)
 * [Fixing build_packages](#fixing-build_packages)
-* [Building droidmedia & audioflingerglue](#building-droidmedia-audioflingerglue)
+* [Building extra packages](#building-extra-packages)
 
 ## Starting from ground zero
 
@@ -119,7 +119,7 @@ repo init -u git://github.com/mer-hybris/android.git -b hybris-15.1 --depth 1
 cd .repo/
 sed -i "/hybris-boot/d" manifest.xml
 sed -i "/droidmedia/d" manifest.xml
-git clone https://github.com/sailfishos-oneplus5/local_manifests.git -b hybris-15.1
+git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-15.1
 cd -
 ```
 
@@ -127,18 +127,13 @@ Now that the repo is initialized you can start [syncing the local repository](BU
 
 ## Fixing build_packages
 
-Upstream [`ofono-ril-binder-plugin`](https://github.com/mer-hybris/ofono-ril-binder-plugin) since the start of July 2019 now requires a newer version of [`libgrilio`](https://git.merproject.org/mer-core/libgrilio) which isn't yet provided by default. We'll build this newer version manually:
+Upstream [`ofono-ril-binder-plugin`](https://git.io/fjMeu) since the start of July 2019 now requires a newer version of [`libgrilio`](https://git.merproject.org/mer-core/libgrilio) which isn't yet provided by default. We'll build this newer version manually:
 ```
 PLATFORM_SDK $
 
-cd hybris/droid-configs/patterns/
-sed -i "s/- gstreamer1.0-droid.*/#- gstreamer1.0-droid/" jolla-hw-adaptation-cheeseburger.yaml
-sed -i "s/- pulseaudio-modules-droid-glue.*/#- pulseaudio-modules-droid-glue/" jolla-hw-adaptation-cheeseburger.yaml
-cd -
-
 rpm/dhd/helpers/build_packages.sh -d
 cd hybris/mw/
-git clone https://git.merproject.org/mer-core/libgrilio.git
+git clone https://git.merproject.org/mer-core/libgrilio
 cd -
 rpm/dhd/helpers/build_packages.sh -b hybris/mw/libgrilio
 ```
@@ -151,9 +146,9 @@ rpm/dhd/helpers/build_packages.sh -c
 sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -R -m sdk-install zypper in bluez5-obexd droid-config-cheeseburger droid-config-cheeseburger-bluez5 kf5bluezqt-bluez5 libcommhistory-qt5 libcontacts-qt5 libical obex-capability obexd-calldata-provider obexd-contentfilter-helper qt5-qtpim-versit qtcontacts-sqlite-qt5
 ```
 
-## Building droidmedia & audioflingerglue<a name="building-droidmedia-audioflingerglue"></a>
+## Building extra packages
 
-These 2 packages are responsible for (somewhat) fixing video recording and working call audio. They aren't built by default, so that's what we'll be doing next (on my machine this process took ~10 mins total):
+These extra packages are responsible for fixing video recording, working call audio and device specific features such as notification slider & display off gestures. They aren't built by default, so that's why we'll be building them next (on my machine this process took ~10 mins total):
 ```
 HA_BUILD $
 
@@ -164,31 +159,32 @@ exit
 
 PLATFORM_SDK $
 
-DROIDMEDIA_VERSION=0.20190707.0;
-rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION;
-mkdir -p hybris/mw/droidmedia-localbuild/rpm;
-cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec;
-sed -ie "s/0.0.0/$DROIDMEDIA_VERSION/" hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec;
-mv hybris/mw/droidmedia-$DROIDMEDIA_VERSION.tgz hybris/mw/droidmedia-localbuild;
-rpm/dhd/helpers/build_packages.sh --build=hybris/mw/droidmedia-localbuild;
+DROIDMEDIA_VERSION=0.20190719.0
+rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION
+mkdir -p hybris/mw/droidmedia-localbuild/rpm
+cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
+sed -ie "s/0.0.0/$DROIDMEDIA_VERSION/" hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
+mv hybris/mw/droidmedia-$DROIDMEDIA_VERSION.tgz hybris/mw/droidmedia-localbuild
+rpm/dhd/helpers/build_packages.sh --build=hybris/mw/droidmedia-localbuild
 rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/sailfishos/gst-droid.git
 
-AUDIOFLINGERGLUE_VERSION=0.0.12;
-rpm/dhd/helpers/pack_source_audioflingerglue-localbuild.sh $AUDIOFLINGERGLUE_VERSION;
-mkdir -p hybris/mw/audioflingerglue-localbuild/rpm;
-cp rpm/dhd/helpers/audioflingerglue-localbuild.spec hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec;
-sed -ie "s/0.0.0/$AUDIOFLINGERGLUE_VERSION/" hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec;
-mv hybris/mw/audioflingerglue-$AUDIOFLINGERGLUE_VERSION.tgz hybris/mw/audioflingerglue-localbuild;
-rpm/dhd/helpers/build_packages.sh --build=hybris/mw/audioflingerglue-localbuild;
+AUDIOFLINGERGLUE_VERSION=0.0.12
+rpm/dhd/helpers/pack_source_audioflingerglue-localbuild.sh $AUDIOFLINGERGLUE_VERSION
+mkdir -p hybris/mw/audioflingerglue-localbuild/rpm
+cp rpm/dhd/helpers/audioflingerglue-localbuild.spec hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
+sed -ie "s/0.0.0/$AUDIOFLINGERGLUE_VERSION/" hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
+mv hybris/mw/audioflingerglue-$AUDIOFLINGERGLUE_VERSION.tgz hybris/mw/audioflingerglue-localbuild
+rpm/dhd/helpers/build_packages.sh --build=hybris/mw/audioflingerglue-localbuild
 rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/mer-hybris/pulseaudio-modules-droid-glue.git
 
-cd hybris/droid-configs/patterns/
-sed -i "s/#- gstreamer1.0-droid.*/- gstreamer1.0-droid/" jolla-hw-adaptation-cheeseburger.yaml
-sed -i "s/#- pulseaudio-modules-droid-glue.*/- pulseaudio-modules-droid-glue/" jolla-hw-adaptation-cheeseburger.yaml
-cd -
+git clone https://github.com/sailfishos-oneplus5/triambience hybris/mw/triambience-localbuild/
+rpm/dhd/helpers/build_packages.sh --build=hybris/mw/triambience-localbuild
+
+git clone https://github.com/sailfishos-oneplus5/onyx-triambience-settings-plugin hybris/mw/onyx-triambience-settings-plugin-localbuild/
+rpm/dhd/helpers/build_packages.sh --build=hybris/mw/onyx-triambience-settings-plugin-localbuild
+
 rpm/dhd/helpers/build_packages.sh -c
 ```
-**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://github.com/sailfishos-oneplus5/droidmedia/releases/latest) and [AUDIOFLINGERGLUE_VERSION](https://github.com/mer-hybris/audioflingerglue/releases) values with their latest versions if they are different different.
+**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/fjMe2) and [AUDIOFLINGERGLUE_VERSION](https://git.io/fjMeg) values with their latest versions if they are different different.
 
 Once you're done you can check out [building the SFOS rootfs](BUILDING.md#building-the-sfos-rootfs) over on the [regular building guide](BUILDING.md).
-
