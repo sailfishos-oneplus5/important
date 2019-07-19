@@ -69,7 +69,7 @@ Sailfish OS packages will need to be built many times during development. To sel
 PLATFORM_SDK $ rpm/dhd/helpers/build_packages.sh
 ```
 
-**NOTE:** If this was your first time running build_packages, see [building droidmedia & audioflingerglue](INITIAL-BUILDING.md#building-droidmedia-audioflingerglue) under the [initial building guide](INITIAL-BUILDING.md).
+**NOTE:** If this was your first time running build_packages, see [building extra packages](INITIAL-BUILDING.md#building-extra-packages) under the [initial building guide](INITIAL-BUILDING.md).
 
 When just droid configs have been modified, `rpm/dhd/helpers/build_packages.sh -c` will be enough. Same goes for droid HAL stuff, but with `-d` flag instead. Building with these flags set will be substantially faster than rebuilding everything.
 
@@ -96,4 +96,3 @@ hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh
 sudo mic create fs --arch=$PORT_ARCH --tokenmap=ARCH:$PORT_ARCH,RELEASE:$RELEASE,EXTRA_NAME:$EXTRA_NAME --record-pkgs=name,url --outdir=sfe-$DEVICE-$RELEASE$EXTRA_NAME --pack-to=sfe-$DEVICE-$RELEASE$EXTRA_NAME.tar.bz2 $ANDROID_ROOT/Jolla-@RELEASE@-$DEVICE-@ARCH@.ks
 ```
 Hooray! You've now successfully fully built all of the Sailfish OS source code into a rather tiny (~350 MB) flashable zip file! Look into the [flashing guide](FLASHING.md) on how to proceed.
-
