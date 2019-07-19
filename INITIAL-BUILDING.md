@@ -119,6 +119,7 @@ repo init -u git://github.com/mer-hybris/android.git -b hybris-15.1 --depth 1
 cd .repo/
 sed -i "/hybris-boot/d" manifest.xml
 sed -i "/droidmedia/d" manifest.xml
+sed -i "/audioflingerglue/d" manifest.xml
 git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-15.1
 cd -
 ```
