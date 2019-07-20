@@ -116,12 +116,7 @@ HA_BUILD $
 
 cd $ANDROID_ROOT
 repo init -u git://github.com/mer-hybris/android.git -b hybris-15.1 --depth 1
-cd .repo/
-sed -i "/hybris-boot/d" manifest.xml
-sed -i "/droidmedia/d" manifest.xml
-sed -i "/audioflingerglue/d" manifest.xml
-git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-15.1
-cd -
+git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-15.1 .repo/local_manifests/
 ```
 
 Now that the repo is initialized you can start [syncing the local repository](BUILDING.md#syncing-local-repository) as per the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.
