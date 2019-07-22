@@ -56,13 +56,13 @@ After entering the Platform SDK prompt, we need to fetch the HADK Android tools 
 PLATFORM_SDK $
 
 sudo zypper ref
-sudo zypper --non-interactive in android-tools-hadk
+sudo zypper --non-interactive in android-tools-hadk bc
 ```
 **NOTE:** Repository errors for `adaptation0` can be safely ignored here and in the future.
 
 ## Adding SFOS build target
 
-In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To set it up, the following set of commands should be run:
+In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.0.3.10` at the time of writing, the following command should be run:
 ```
 PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
 ```
@@ -87,9 +87,6 @@ sudo mkdir -p $UBUNTU_CHROOT
 sudo tar --numeric-owner -xjf $TARBALL -C $UBUNTU_CHROOT
 sudo sed -i "s/\tlocalhost/\t$(</parentroot/etc/hostname)/g" $UBUNTU_CHROOT/etc/hosts
 cd $ANDROID_ROOT
-curl -L https://git.io/fjPTL > installer-sparse.zip
-unzip installer-sparse.zip -d installer-sparse/
-rm installer-sparse.zip
 habuild
 ```
 
@@ -127,17 +124,17 @@ Upstream [`ofono-ril-binder-plugin`](https://git.io/fjMeu) since the start of Ju
 ```
 PLATFORM_SDK $
 
-rpm/dhd/helpers/build_packages.sh -d
+build_droid_hal
 git clone https://git.merproject.org/mer-core/libgrilio hybris/mw/libgrilio/
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/libgrilio
+rpm/dhd/helpers/build_packages.sh --build=hybris/mw/libgrilio
 ```
 
 Another issue is [`ofono-configs`](https://git.io/fjik8) (which are provided by [sparse files](https://git.io/fjKXf) in [dcd](https://git.io/fjiIU)). Thankfully it's a simple fix:
 ```
 PLATFORM_SDK $
 
-rpm/dhd/helpers/build_packages.sh -c
-sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -R -m sdk-install zypper in bluez5-obexd droid-config-cheeseburger droid-config-cheeseburger-bluez5 kf5bluezqt-bluez5 libcommhistory-qt5 libcontacts-qt5 libical obex-capability obexd-calldata-provider obexd-contentfilter-helper qt5-qtpim-versit qtcontacts-sqlite-qt5
+build_device_configs
+sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -R -m sdk-install zypper in bluez5-obexd droid-config-$DEVICE droid-config-$DEVICE-bluez5 kf5bluezqt-bluez5 libcommhistory-qt5 libcontacts-qt5 libical obex-capability obexd-calldata-provider obexd-contentfilter-helper qt5-qtpim-versit qtcontacts-sqlite-qt5
 ```
 
 ## Building extra packages
@@ -177,7 +174,7 @@ rpm/dhd/helpers/build_packages.sh --build=hybris/mw/triambience-localbuild
 git clone https://github.com/sailfishos-oneplus5/onyx-triambience-settings-plugin hybris/mw/onyx-triambience-settings-plugin-localbuild/
 rpm/dhd/helpers/build_packages.sh --build=hybris/mw/onyx-triambience-settings-plugin-localbuild
 
-rpm/dhd/helpers/build_packages.sh -c
+build_device_configs
 ```
 **NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/fjMe2) and [AUDIOFLINGERGLUE_VERSION](https://git.io/fjMeg) values with their latest versions if they are different different.
 
