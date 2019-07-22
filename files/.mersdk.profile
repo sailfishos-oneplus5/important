@@ -8,6 +8,26 @@ export RELEASE=`cat /etc/os-release | grep VERSION_ID | cut -d"=" -f2`
 
 builder_script="rpm/dhd/helpers/build_packages.sh"
 
+function gen_ks() {
+	echo '$ HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@"' &&
+	HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@" &&
+	echo '$ HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@"' &&
+	HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@" &&
+	echo '$ KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks"' &&
+	KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks" &&
+	echo '$ sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS' &&
+	sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS &&
+	echo '$ hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh' &&
+	hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh
+}
+
+function build_all_packages() {
+	cd $ANDROID_ROOT
+
+	echo "$ $builder_script $@"
+	$builder_script $@ && gen_ks
+}
+
 function build_packages() {
 	cd $ANDROID_ROOT
 
@@ -16,22 +36,10 @@ function build_packages() {
 		return
 	fi
 
-	local cmd="$builder_script $@"
-	echo "$ $cmd"
+	echo "$ $builder_script $@"
 	$builder_script $@ || return
 	
-	if [[ $@ == *"-c"* ]] || [[ $@ == *"--configs"* ]]; then
-		echo '$ HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@"' &&
-		HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@" &&
-		echo '$ HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@"' &&
-		HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@" &&
-		echo '$ KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks"' &&
-		KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks" &&
-		echo '$ sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS' &&
-		sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS &&
-		echo '$ hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh' &&
-		hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh
-	fi
+	[[ $@ == *"-c"* || $@ == *"--configs"* ]] && gen_ks
 }
 
 function run_mic_build() {
@@ -71,15 +79,14 @@ function run_mic_build() {
 alias ha_build="ubu-chroot -r $PLATFORM_SDK_ROOT/sdks/ubuntu"
 alias habuild="ha_build"
 
-alias build_all_packages="build_packages"
-alias build_all_pkgs="build_packages"
-alias build_all="build_packages"
+alias build_all_pkgs="build_all_packages"
+alias build_all="build_all_packages"
+alias build_pkgs="build_packages"
 alias build_droid_hal="build_packages -d"
 alias build_hal="build_droid_hal"
 alias build_device_configs="build_packages -c"
 alias build_configs="build_device_configs"
 alias build_cfgs="build_device_configs"
-alias build_pkgs="build_packages"
 
 alias do_mic_build="run_mic_build"
 alias mic_build="run_mic_build"
