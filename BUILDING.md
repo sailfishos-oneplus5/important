@@ -50,14 +50,9 @@ Now we will build the required parts of LineageOS for HAL to function properly u
 HA_BUILD $ mka hybris-hal
 ```
 
-During the `hybris-hal` build process a `hybris-boot.img` boot image in `out/target/product/$DEVICE/` will be generated. When kernel and other Android side changes are done afterwards the image can be regenerated using:
+During the `hybris-hal` build process `hybris-*.img` boot images in `out/target/product/$DEVICE/` will be generated. When kernel and other Android side changes are done afterwards the image can be regenerated using:
 ```
 HA_BUILD $ mka hybris-boot
-```
-
-In case a recovery boot image is needed, it can be built like so:
-```
-HA_BUILD $ mka hybris-recovery
 ```
 
 ## Building SFOS packages
