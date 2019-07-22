@@ -125,7 +125,7 @@ Upstream [`ofono-ril-binder-plugin`](https://git.io/fjMeu) since the start of Ju
 PLATFORM_SDK $
 
 build_droid_hal
-git clone https://git.merproject.org/mer-core/libgrilio hybris/mw/libgrilio/
+git clone https://git.merproject.org/mer-core/libgrilio.git hybris/mw/libgrilio/
 rpm/dhd/helpers/build_packages.sh --build=hybris/mw/libgrilio
 ```
 
