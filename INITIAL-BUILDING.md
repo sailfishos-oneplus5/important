@@ -174,6 +174,10 @@ rpm/dhd/helpers/build_packages.sh --build=hybris/mw/triambience-localbuild
 git clone https://github.com/sailfishos-oneplus5/onyx-triambience-settings-plugin hybris/mw/onyx-triambience-settings-plugin-localbuild/
 rpm/dhd/helpers/build_packages.sh --build=hybris/mw/onyx-triambience-settings-plugin-localbuild
 
+rm -rf hybris/mw/pulseaudio-modules-droid/
+git clone https://github.com/sailfishos-oneplus5/pulseaudio-modules-droid hybris/mw/pulseaudio-modules-droid/
+rpm/dhd/helpers/build_packages.sh --build=hybris/mw/pulseaudio-modules-droid/
+
 build_device_configs
 ```
 **NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/fjMe2) and [AUDIOFLINGERGLUE_VERSION](https://git.io/fjMeg) values with their latest versions if they are different different.
