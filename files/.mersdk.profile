@@ -32,7 +32,7 @@ function build_packages() {
 	cd $ANDROID_ROOT
 
 	if (( $# == 0 )); then
-		build_packages -d && build_packages -c
+		build_packages -d; build_packages -c
 		return
 	fi
 
