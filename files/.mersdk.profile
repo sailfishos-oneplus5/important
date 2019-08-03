@@ -44,27 +44,25 @@ function build_packages() {
 
 function run_mic_build() {
 	if [ -z $UPDATES_CHECKED ]; then
+		# Function to check if version is less than or equal to another one
+		verlte() { printf '%s\n%s' "$1" "$2" | sort -C -V; }
+
 		# Fetch latest public release version
-		# e.g. "<td>v3.0.3.10</td>"
-		local tmp=`curl -s https://en.wikipedia.org/wiki/Sailfish_OS | grep -B 2 "^<td>Public release$" | grep "^<td>v" | tail -1`
-		# e.g. "3.0.3.10</td>"
-		tmp=${tmp#*v}
-		# e.g. "3.0.3.10"
+		local tmp=`curl -s https://en.wikipedia.org/wiki/Sailfish_OS | grep -B 2 "^<td>Public release$" | grep "^<td>v" | tail -1` # e.g. "<td>v3.0.3.10</td>"
+		tmp=${tmp#*v} # e.g. "3.0.3.10</td>"
+		local LATEST_RELEASE=${tmp::${#tmp}-5} # e.g. "3.0.3.10"
+		local LATEST_TOOLING=`echo $LATEST_RELEASE | cut --complement -d"." -f4-` # e.g. "3.0.3"
+		local CURRENT_TOOLING=`cat /etc/os-release | grep VERSION_ID | cut -d"=" -f2 | cut --complement -d"." -f4-` # e.g. "3.1.0"
 
-		local LATEST_RELEASE=${tmp::${#tmp}-5}
-
-		# Check if can be build
-		# e.g. "3.0.3"
-		local CURRENT_TOOLING=`cat /etc/os-release | grep VERSION_ID | cut -d"=" -f2 | cut --complement -d"." -f4-`
-		# Can't build => Check if tooling updates available
-		if [[ "$LATEST_RELEASE" == "$CURRENT_TOOLING"* ]]; then
+		# Can we build latest w/ current tooling (e.g. '3.0.3' vs '3.1.0')
+		verlte "$LATEST_TOOLING" "$CURRENT_TOOLING"
+		if (( $? == 0 )); then
 			# TODO Check if installed tooling is latest available from http://releases.sailfishos.org/sdk/targets/
-
 			RELEASE="$LATEST_RELEASE"
 			echo ">> Targeting latest public release $LATEST_RELEASE."
+
+		# Can't build w/ current tooling => Check if tooling updates available
 		else
-			# e.g. "3.1.0"
-			local LATEST_TOOLING=`echo $LATEST_RELEASE | cut --complement -d"." -f4-`
 			curl -s http://releases.sailfishos.org/sdk/targets/ | fgrep $LATEST_TOOLING &>/dev/null && echo ">> Build target updates available ($CURRENT_TOOLING.x => $LATEST_TOOLING.x)! Resources: http://releases.sailfishos.org/sdk/targets/ https://git.io/fjM1D"
 		fi
 

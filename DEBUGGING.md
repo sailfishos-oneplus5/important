@@ -44,7 +44,7 @@ HOST $ ssh nemo@192.168.1.105
 nemo@192.168.1.105's password: 
 Last login: Sun Jul  7 12:16:15 2019
 ,---
-| Sailfish OS 3.0.3.10 (Hossa)
+| Sailfish OS 3.1.0.12 (Seitseminen)
 '---
 [nemo@Sailfish ~]$
 ```

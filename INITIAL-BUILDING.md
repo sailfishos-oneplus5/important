@@ -62,7 +62,7 @@ sudo zypper --non-interactive in android-tools-hadk bc
 
 ## Adding SFOS build target
 
-In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.0.3.10` at the time of writing, the following command should be run:
+In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.1.0.12` at the time of writing, the following command should be run:
 ```
 PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
 ```
@@ -70,7 +70,7 @@ PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http:/
 To verify that the install succeeded, executing `sdk-assistant list` should yield something like this:
 ```
 PLATFORM_SDK $ sdk-assistant list
-SailfishOS-3.0.3.9
+SailfishOS-3.1.0.12
 `-oneplus-cheeseburger-armv7hl
 ```
 
@@ -129,7 +129,7 @@ git clone https://git.merproject.org/mer-core/libgrilio.git hybris/mw/libgrilio/
 rpm/dhd/helpers/build_packages.sh --build=hybris/mw/libgrilio
 ```
 
-Another issue is [`ofono-configs`](https://git.io/fjik8) (which are provided by [sparse files](https://git.io/fjKXf) in [dcd](https://git.io/fjiIU)). Thankfully it's a simple fix:
+Another issue is [`ofono-configs`](https://git.io/fj9dy) (which are provided by [sparse files](https://git.io/fjKXf) in [dcd](https://git.io/fjiIU)). Thankfully it's a simple fix:
 ```
 PLATFORM_SDK $
 
