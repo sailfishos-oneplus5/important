@@ -17,6 +17,8 @@ For me this has happened when flashing the wrong LineageOS 15.1 zip. Double-chec
 
 In my experience this usually happens when you **DON'T** flash the LineageOS 15.1 zip before SFOS zip (e.g. after testing everything & wiping all but `/system`). Please make sure you followed the [flashing guide](FLASHING.md) fully!
 
+I've also noticed some other e.g. `unofficial` LineageOS builds causing this behavior as well.
+
 ## Getting telnet
 
 You can think of `telnet` as a replacement for the [ADB](https://developer.android.com/studio/command-line/adb) shell. On the host a telnet session can be started by typing:

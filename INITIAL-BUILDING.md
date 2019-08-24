@@ -120,13 +120,12 @@ Now that the repo is initialized you can start [syncing the local repository](BU
 
 ## Fixing build_packages
 
-Upstream [`ofono-ril-binder-plugin`](https://git.io/fjMeu) since the start of July 2019 now requires a newer version of [`libgrilio`](https://git.merproject.org/mer-core/libgrilio) which isn't yet provided by default. We'll build this newer version manually:
+For now since upstream [`ofono-ril-binder-plugin`](https://git.io/fjMeu) requires newer versions of both [`libgrilio`](https://git.merproject.org/mer-core/libgrilio) & [`ofono`](https://git.merproject.org/mer-core/ofono) which aren't yet provided by default, we'll use a downgraded `ofono-ril-binder-plugin` package:
 ```
 PLATFORM_SDK $
 
 build_droid_hal
-git clone https://git.merproject.org/mer-core/libgrilio.git hybris/mw/libgrilio/
-rpm/dhd/helpers/build_packages.sh --build=hybris/mw/libgrilio
+rpm/dhd/helpers/build_packages.sh -b hybris/mw/ofono-ril-binder-plugin
 ```
 
 Another issue is [`ofono-configs`](https://git.io/fj9dy) (which are provided by [sparse files](https://git.io/fjKXf) in [dcd](https://git.io/fjiIU)). Thankfully it's a simple fix:
@@ -145,41 +144,25 @@ HA_BUILD $
 
 gettargetarch > lunch_arch
 make -j`nproc` $(external/droidmedia/detect_build_targets.sh $PORT_ARCH)
-make -j`nproc` $(external/audioflingerglue/detect_build_targets.sh $PORT_ARCH)
 exit
 
 PLATFORM_SDK $
 
-DROIDMEDIA_VERSION=0.20190719.0
+DROIDMEDIA_VERSION=0.20190824.0
 rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION
 mkdir -p hybris/mw/droidmedia-localbuild/rpm
 cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
 sed -ie "s/0.0.0/$DROIDMEDIA_VERSION/" hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
 mv hybris/mw/droidmedia-$DROIDMEDIA_VERSION.tgz hybris/mw/droidmedia-localbuild
-rpm/dhd/helpers/build_packages.sh --build=hybris/mw/droidmedia-localbuild
+rpm/dhd/helpers/build_packages.sh -b hybris/mw/droidmedia-localbuild
 rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/sailfishos/gst-droid.git
 
-AUDIOFLINGERGLUE_VERSION=0.0.12
-rpm/dhd/helpers/pack_source_audioflingerglue-localbuild.sh $AUDIOFLINGERGLUE_VERSION
-mkdir -p hybris/mw/audioflingerglue-localbuild/rpm
-cp rpm/dhd/helpers/audioflingerglue-localbuild.spec hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
-sed -ie "s/0.0.0/$AUDIOFLINGERGLUE_VERSION/" hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
-mv hybris/mw/audioflingerglue-$AUDIOFLINGERGLUE_VERSION.tgz hybris/mw/audioflingerglue-localbuild
-rpm/dhd/helpers/build_packages.sh --build=hybris/mw/audioflingerglue-localbuild
-rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/mer-hybris/pulseaudio-modules-droid-glue.git
-
-git clone https://github.com/sailfishos-oneplus5/triambience hybris/mw/triambience-localbuild/
-rpm/dhd/helpers/build_packages.sh --build=hybris/mw/triambience-localbuild
-
-git clone https://github.com/sailfishos-oneplus5/onyx-triambience-settings-plugin hybris/mw/onyx-triambience-settings-plugin-localbuild/
-rpm/dhd/helpers/build_packages.sh --build=hybris/mw/onyx-triambience-settings-plugin-localbuild
-
-rm -rf hybris/mw/pulseaudio-modules-droid/
-git clone https://github.com/sailfishos-oneplus5/pulseaudio-modules-droid hybris/mw/pulseaudio-modules-droid/
-rpm/dhd/helpers/build_packages.sh --build=hybris/mw/pulseaudio-modules-droid/
+rpm/dhd/helpers/build_packages.sh -b hybris/mw/triambience
+rpm/dhd/helpers/build_packages.sh -b hybris/mw/onyx-triambience-settings-plugin
+rpm/dhd/helpers/build_packages.sh -b hybris/mw/pulseaudio-modules-droid-hidl/
 
 build_device_configs
 ```
-**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/fjMe2) and [AUDIOFLINGERGLUE_VERSION](https://git.io/fjMeg) values with their latest versions if they are different different.
+**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/fjMe2) value with the latest version if it is different.
 
 Once you're done you can check out [building the SFOS rootfs](BUILDING.md#building-the-sfos-rootfs) over on the [regular building guide](BUILDING.md).
