@@ -56,17 +56,27 @@ function run_mic_build() {
 		tmp=${tmp#*v} # e.g. "3.0.3.10</td>"
 		local LATEST_RELEASE=${tmp::${#tmp}-5} # e.g. "3.0.3.10"
 		local LATEST_TOOLING=`echo $LATEST_RELEASE | cut --complement -d"." -f4-` # e.g. "3.0.3"
-		local CURRENT_TOOLING=`cat /etc/os-release | grep VERSION_ID | cut -d"=" -f2 | cut --complement -d"." -f4-` # e.g. "3.1.0"
+		local CURRENT_TOOLING=`echo $RELEASE | cut --complement -d"." -f4-` # e.g. "3.1.0"
 
 		# Can we build latest w/ current tooling (e.g. '3.0.3' vs '3.1.0')
 		vercomp "$LATEST_TOOLING" "$CURRENT_TOOLING"
-		tmp=$?
-		if (( $tmp == 0 )); then
+		local res=$?
+		if (( $res == 0 )); then
 			# TODO Check if installed tooling is latest available from http://releases.sailfishos.org/sdk/targets/
-			RELEASE="$LATEST_RELEASE"
-			echo ">> Targeting latest public release $LATEST_RELEASE."
 
-		# Out-of-date version history => Use tooling release
+			# Only use latest tooling if it's actually newer
+			vercomp "$LATEST_RELEASE" "$RELEASE"
+			res=$?
+			if (( $res == 2 )); then
+				RELEASE="$LATEST_RELEASE"
+				echo ">> Targeting latest public release $RELEASE."
+
+			# Out-of-date version history => Use local tooling
+			else
+				echo ">> Targeting installed tooling release $RELEASE."
+			fi
+
+		# Out-of-date version history => Use local tooling
 		elif (( $tmp == 1 )); then
 			echo ">> Targeting installed tooling release $RELEASE."
 

@@ -35,7 +35,7 @@ At this point the process of downloading source code for LineageOS and libhybris
 
 At first this may take a while depending on your internet connection speed (with 200 mbit/s it'll take ~10 mins for reference):
 ```
-HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-tags --no-clone-bundle && rm -rf vendor/lineage/bootanimation/
+HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-tags --no-clone-bundle
 ```
 
 If this is your first time building, execute the following line to finalize the environment:
@@ -45,7 +45,7 @@ HA_BUILD $ . build/envsetup.sh && breakfast $DEVICE && export USE_CCACHE=1
 
 ## Building HAL parts
 
-Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 25 minutes on 4 relatively fast CPU cores (i5-4690K) for the first time. To start the process, enter:
+Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 6 minutes on 16 Zen 2 threads (R7 3700X) for the first time. To start the process, enter:
 ```
 HA_BUILD $ mka hybris-hal
 ```

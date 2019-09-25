@@ -43,6 +43,7 @@ Here's where the magic magic happens in terms of building Sailfish OS itself. To
 ```
 HOST $
 
+exec bash
 sudo mkdir -p $PLATFORM_SDK_ROOT/{targets,toolings,sdks/sfossdk}
 sudo ln -s /srv/mer/sdks/sfossdk/srv/mer/sdks/ubuntu/ /srv/mer/sdks/ubuntu
 cd && curl -k -O http://releases.sailfishos.org/sdk/installers/latest/Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2
@@ -85,7 +86,7 @@ cd && curl -O https://releases.sailfishos.org/ubu/$TARBALL
 UBUNTU_CHROOT=$PLATFORM_SDK_ROOT/sdks/ubuntu
 sudo mkdir -p $UBUNTU_CHROOT
 sudo tar --numeric-owner -xjf $TARBALL -C $UBUNTU_CHROOT
-sudo sed -i "s/\tlocalhost/\t$(</parentroot/etc/hostname)/g" $UBUNTU_CHROOT/etc/hosts
+sudo sed "s/\tlocalhost/\t$(</parentroot/etc/hostname)/g" -i $UBUNTU_CHROOT/etc/hosts
 cd $ANDROID_ROOT
 habuild
 ```
@@ -143,7 +144,8 @@ These extra packages are responsible for fixing video recording, working call au
 HA_BUILD $
 
 gettargetarch > lunch_arch
-make -j`nproc` $(external/droidmedia/detect_build_targets.sh $PORT_ARCH)
+mka $(external/droidmedia/detect_build_targets.sh $PORT_ARCH)
+mka $(external/audioflingerglue/detect_build_targets.sh $PORT_ARCH)
 exit
 
 PLATFORM_SDK $
@@ -152,17 +154,26 @@ DROIDMEDIA_VERSION=0.20190824.0
 rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION
 mkdir -p hybris/mw/droidmedia-localbuild/rpm
 cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
-sed -ie "s/0.0.0/$DROIDMEDIA_VERSION/" hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
+sed "s/0.0.0/$DROIDMEDIA_VERSION/" -i hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
 mv hybris/mw/droidmedia-$DROIDMEDIA_VERSION.tgz hybris/mw/droidmedia-localbuild
 rpm/dhd/helpers/build_packages.sh -b hybris/mw/droidmedia-localbuild
 rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/sailfishos/gst-droid.git
 
+AUDIOFLINGERGLUE_VERSION=0.0.13
+rpm/dhd/helpers/pack_source_audioflingerglue-localbuild.sh $AUDIOFLINGERGLUE_VERSION
+mkdir -p hybris/mw/audioflingerglue-localbuild/rpm
+cp rpm/dhd/helpers/audioflingerglue-localbuild.spec hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
+sed "s/0.0.0/$AUDIOFLINGERGLUE_VERSION/" -i hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
+mv hybris/mw/audioflingerglue-$AUDIOFLINGERGLUE_VERSION.tgz hybris/mw/audioflingerglue-localbuild
+rpm/dhd/helpers/build_packages.sh -b hybris/mw/audioflingerglue-localbuild
+rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/mer-hybris/pulseaudio-modules-droid-glue.git
+
 rpm/dhd/helpers/build_packages.sh -b hybris/mw/triambience
 rpm/dhd/helpers/build_packages.sh -b hybris/mw/onyx-triambience-settings-plugin
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/pulseaudio-modules-droid-hidl/
+rpm/dhd/helpers/build_packages.sh -b hybris/mw/pulseaudio-modules-droid-hidl
 
 build_device_configs
 ```
-**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/fjMe2) value with the latest version if it is different.
+**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/fjMe2) and [AUDIOFLINGERGLUE_VERSION](https://git.io/JeG4v) values with their latest versions if they are different.
 
 Once you're done you can check out [building the SFOS rootfs](BUILDING.md#building-the-sfos-rootfs) over on the [regular building guide](BUILDING.md).
