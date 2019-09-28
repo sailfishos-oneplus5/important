@@ -119,36 +119,10 @@ git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-15.1 
 
 Now that the repo is initialized you can start [syncing the local repository](BUILDING.md#syncing-local-repository) as per the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.
 
-## Fixing build_packages
-
-For now since upstream [`ofono-ril-binder-plugin`](https://git.io/fjMeu) requires newer versions of both [`libgrilio`](https://git.merproject.org/mer-core/libgrilio) & [`ofono`](https://git.merproject.org/mer-core/ofono) which aren't yet provided by default, we'll use a downgraded `ofono-ril-binder-plugin` package:
-```
-PLATFORM_SDK $
-
-build_droid_hal
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/ofono-ril-binder-plugin
-```
-
-Another issue is [`ofono-configs`](https://git.io/fj9dy) (which are provided by [sparse files](https://git.io/fjKXf) in [dcd](https://git.io/fjiIU)). Thankfully it's a simple fix:
-```
-PLATFORM_SDK $
-
-build_device_configs
-sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -R -m sdk-install zypper in bluez5-obexd droid-config-$DEVICE droid-config-$DEVICE-bluez5 kf5bluezqt-bluez5 libcommhistory-qt5 libcontacts-qt5 libical obex-capability obexd-calldata-provider obexd-contentfilter-helper qt5-qtpim-versit qtcontacts-sqlite-qt5
-```
-
 ## Building extra packages
 
-These extra packages are responsible for fixing video recording, working call audio and device specific features such as notification slider & display off gestures. They aren't built by default, so that's why we'll be building them next (on my machine this process took ~10 mins total):
+These extra packages are responsible for fixing video recording, working call audio and device specific features such as notification slider & display off gestures. They aren't built by default, so that's why we'll be building them next:
 ```
-HA_BUILD $
-
-gettargetarch > lunch_arch
-echo "MINIMEDIA_AUDIOPOLICYSERVICE_ENABLE := 1" > external/droidmedia/env.mk
-mka $(external/droidmedia/detect_build_targets.sh $PORT_ARCH)
-mka $(external/audioflingerglue/detect_build_targets.sh $PORT_ARCH)
-exit
-
 PLATFORM_SDK $
 
 DROIDMEDIA_VERSION=0.20190824.0
@@ -158,7 +132,7 @@ cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rp
 sed "s/0.0.0/$DROIDMEDIA_VERSION/" -i hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
 mv hybris/mw/droidmedia-$DROIDMEDIA_VERSION.tgz hybris/mw/droidmedia-localbuild
 rpm/dhd/helpers/build_packages.sh -b hybris/mw/droidmedia-localbuild
-rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/sailfishos/gst-droid.git
+rpm/dhd/helpers/build_packages.sh --mw=https://github.com/sailfishos/gst-droid.git
 
 AUDIOFLINGERGLUE_VERSION=0.0.13
 rpm/dhd/helpers/pack_source_audioflingerglue-localbuild.sh $AUDIOFLINGERGLUE_VERSION
@@ -167,11 +141,7 @@ cp rpm/dhd/helpers/audioflingerglue-localbuild.spec hybris/mw/audioflingerglue-l
 sed "s/0.0.0/$AUDIOFLINGERGLUE_VERSION/" -i hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
 mv hybris/mw/audioflingerglue-$AUDIOFLINGERGLUE_VERSION.tgz hybris/mw/audioflingerglue-localbuild
 rpm/dhd/helpers/build_packages.sh -b hybris/mw/audioflingerglue-localbuild
-rpm/dhd/helpers/build_packages.sh --droid-hal --mw=https://github.com/mer-hybris/pulseaudio-modules-droid-glue.git
-
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/triambience
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/onyx-triambience-settings-plugin
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/pulseaudio-modules-droid-hidl
+rpm/dhd/helpers/build_packages.sh --mw=https://github.com/mer-hybris/pulseaudio-modules-droid-glue.git
 
 build_device_configs
 ```

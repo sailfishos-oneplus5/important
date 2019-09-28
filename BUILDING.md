@@ -50,6 +50,14 @@ Now we will build the required parts of LineageOS for HAL to function properly u
 HA_BUILD $ mka hybris-hal
 ```
 
+**NOTE:** If this was your first time building the droid HAL side, the following needs to be also executed (this is explained more in [building extra packages](INITIAL-BUILDING.md#building-extra-packages) under the [initial building guide](INITIAL-BUILDING.md) & shouldn't take very long):
+```
+gettargetarch > lunch_arch
+echo "MINIMEDIA_AUDIOPOLICYSERVICE_ENABLE := 1" > external/droidmedia/env.mk
+mka $(external/droidmedia/detect_build_targets.sh $PORT_ARCH)
+mka $(external/audioflingerglue/detect_build_targets.sh $PORT_ARCH)
+```
+
 During the `hybris-hal` build process `hybris-*.img` boot images in `out/target/product/$DEVICE/` will be generated. When kernel and other Android side changes are done afterwards the image can be regenerated using:
 ```
 HA_BUILD $ mka hybris-boot
@@ -57,16 +65,14 @@ HA_BUILD $ mka hybris-boot
 
 ## Building SFOS packages
 
-When building for the first time you need to execute a few commands to fix some issues. See [fixing build_packages](INITIAL-BUILDING.md#fixing-build_packages) under the [initial building guide](INITIAL-BUILDING.md) and come back here afterwards.
-
-Sailfish OS packages will need to be built many times during development. To selectively build / rebuild **everything**, run the following command (full build takes ~15 minutes for me):
+Most likely Sailfish OS packages will need to be built many times during development. To selectively build / rebuild **everything**, run the following command (full build takes ~15 minutes for me):
 ```
 PLATFORM_SDK $ build_all_packages
 ```
 
-**NOTE:** If this was your first time running the command, see [building extra packages](INITIAL-BUILDING.md#building-extra-packages) under the [initial building guide](INITIAL-BUILDING.md).
+**NOTE:** If this was your first time running the command, see [building extra packages](INITIAL-BUILDING.md#building-extra-packages) under the [initial building guide](INITIAL-BUILDING.md) next.
 
-When just droid configs have been modified, `build_device_configs` will be enough. Same goes for droid HAL stuff with `build_droid_hal` instead. Building with these flags set will be substantially faster than rebuilding everything.
+When just droid configs have been modified, `build_device_configs` will be enough. Same goes for droid HAL stuff with `build_droid_hal` instead. Building with these commands instead will be substantially faster than rebuilding everything (which is unnecessary 99% of the time anyways).
 
 ## Building the SFOS rootfs
 
