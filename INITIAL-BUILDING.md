@@ -144,6 +144,7 @@ These extra packages are responsible for fixing video recording, working call au
 HA_BUILD $
 
 gettargetarch > lunch_arch
+echo "MINIMEDIA_AUDIOPOLICYSERVICE_ENABLE := 1" > external/droidmedia/env.mk
 mka $(external/droidmedia/detect_build_targets.sh $PORT_ARCH)
 mka $(external/audioflingerglue/detect_build_targets.sh $PORT_ARCH)
 exit
