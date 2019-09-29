@@ -7,7 +7,6 @@
 * [Setup the HABUILD SDK](#setup-the-habuild-sdk)
 * [Cleaning up](#cleaning-up)
 * [Initializing local repo](#initializing-local-repo)
-* [Fixing build_packages](#fixing-build_packages)
 * [Building extra packages](#building-extra-packages)
 
 ## Starting from ground zero
