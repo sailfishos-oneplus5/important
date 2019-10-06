@@ -124,7 +124,7 @@ These extra packages are responsible for fixing video recording, working call au
 ```
 PLATFORM_SDK $
 
-DROIDMEDIA_VERSION=0.20190824.0
+DROIDMEDIA_VERSION=0.20191005.0
 rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION
 mkdir -p hybris/mw/droidmedia-localbuild/rpm
 cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
