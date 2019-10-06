@@ -53,12 +53,10 @@ e2fsck /dev/block/bootdevice/by-name/userdata
 ## Flashing steps
 
 1. Clear data & caches (factory reset)
-2. Flash [this LineageOS 15.1 zip](https://download.lineage.microg.org/cheeseburger/lineage-15.1-20190225-microG-cheeseburger.zip) (tested by me and known to work)
-3. (Optional) Flash whatever else you normally have on the Android side (e.g. custom kernel, Magisk, ...)
-4. Flash your desired SFOS zip (normally takes ~1 min 30 sec)
+2. Flash [the latest LineageOS 15.1 zip from here](https://mega.nz/#F!W9MyDAJJ!riJ5okLw5CVZlqWoTVC_1g) (tested by me and known to work)
+3. (Optional) Flash whatever else you normally have on the Android side (e.g. custom kernel, GApps, Magisk, disable dm_verity & force-encrypt, ...)
+4. Flash [your desired SFOS zip](https://mega.nz/#F!KhsWGYzT!nKLttGqwJg0DY-IArUlbdQ) (normally takes ~1 min 30 sec)
 5. Reboot
-
-**NOTE:** GApps **DO NOT** work with this linked zip!
 
 ## Skipping tutorial
 
