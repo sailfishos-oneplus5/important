@@ -53,7 +53,6 @@ HA_BUILD $ mka hybris-hal
 **NOTE:** If this was your first time building the droid HAL side, the following needs to be also executed (this is explained more in [building extra packages](INITIAL-BUILDING.md#building-extra-packages) under the [initial building guide](INITIAL-BUILDING.md) & shouldn't take very long):
 ```
 gettargetarch > lunch_arch
-echo "MINIMEDIA_AUDIOPOLICYSERVICE_ENABLE := 1" > external/droidmedia/env.mk
 mka $(external/droidmedia/detect_build_targets.sh $PORT_ARCH)
 mka $(external/audioflingerglue/detect_build_targets.sh $PORT_ARCH)
 ```
