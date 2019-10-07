@@ -3,7 +3,6 @@
 ### Table of Contents
 * [Disclaimer](#disclaimer)
 * [Unlocking the device](#unlocking-the-device)
-* [Verifying Treble support](#verifying-treble-support)
 * [Downgrading firmware & TWRP](#downgrading-firmware-twrp)
 * [Flashing steps](#flashing-steps)
 * [Skipping tutorial](#skipping-tutorial)
@@ -27,14 +26,6 @@
 
 Check out [this forum post](https://forums.oneplus.com/threads/guide-oneplus-5-how-to-unlock-bootloader-flash-twrp-root-nandroid-efs-backup-and-more.548216/), rooting can be ignored as the system will be wiped fully anyways afterwards.
 
-## Verifying Treble support
-
-When booted to TWRP you can verify Treble support via a simple command:
-```
-ADB_SHELL # [ -r /dev/block/bootdevice/by-name/vendor ] || echo "Treble support NOT present!"
-```
-If it doesn't return anything, move forward. In other cases you need to flash stock [O<sub>2</sub>OS 5.1.5](https://otafsg.h2os.com/patch/amazone2/GLO/OnePlus5Oxygen/OnePlus5Oxygen_23.J.38_GLO_038_1808082017/OnePlus5Oxygen_23_OTA_038_all_1808082017_ebb1d69f37.zip) and do an [OTA update to 5.1.6](http://otafsg1.h2os.com/patch/amazone2/GLO/OnePlus5Oxygen/OnePlus5Oxygen_23.J.39_GLO_039_1810091237/OnePlus5Oxygen_23_OTA_039_all_1810091237_160b.zip) from there.
-
 ## Downgrading firmware & TWRP<a name="downgrading-firmware-twrp"></a>
 
 When using Sailfish OS the current port expects the phone to have Android 8 firmware, so most likely downgrading via TWRP will be required.
@@ -54,7 +45,7 @@ e2fsck /dev/block/bootdevice/by-name/userdata
 
 1. Clear data & caches (factory reset)
 2. Flash [the latest LineageOS 15.1 zip from here](https://mega.nz/#F!W9MyDAJJ!riJ5okLw5CVZlqWoTVC_1g) (tested by me and known to work)
-3. (Optional) Flash whatever else you normally have on the Android side (e.g. custom kernel, GApps, Magisk, disable dm_verity & force-encrypt, ...)
+3. (Optional) Flash whatever else you normally have on the Android side (e.g. [OpenGApps](https://opengapps.org/), [Magisk](https://opengapps.org/), [disable dm_verity & force-encrypt](https://zackptg5.com/android.php#disverfe) etc)
 4. Flash [your desired SFOS zip](https://mega.nz/#F!KhsWGYzT!nKLttGqwJg0DY-IArUlbdQ) (normally takes ~1 min 30 sec)
 5. Reboot
 
@@ -68,7 +59,4 @@ What makes SFOS unique as well is that it doesn't actually touch your `/system` 
 
 The only limitation is that you'll be stuck on LOS 15.1 (Android 8.1 Oreo) unless you want to start flashing different ROMs for when you boot SFOS than Android, which I really cannot recommend.
 
-If you want [full regular GApps](https://opengapps.org/) instead of [MicroG](https://microg.org/), you probably want to flash a different **recent** LOS zip than what I [mention on this guide](#flashing-zips) (I haven't personally tested this but it should work as well).
-
 When you've flashed a Sailfish OS zip you can swap between the operating systems without needing wiping anything by simply flashing my [boot-switcher zip](https://git.io/fjPUq) within TWRP.
-

@@ -35,7 +35,7 @@ At this point the process of downloading source code for LineageOS and libhybris
 
 At first this may take a while depending on your internet connection speed (with 200 mbit/s it'll take ~10 mins for reference):
 ```
-HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-tags --no-clone-bundle
+HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-clone-bundle --no-tags
 ```
 
 If this is your first time building, execute the following line to finalize the environment:
@@ -82,4 +82,4 @@ After this you should have a flashable Sailfish OS & boot switcher zips in `sfe-
 PLATFORM_SDK $ run_mic_build
 ```
 
-Hooray! You've now successfully fully built all of the Sailfish OS source code into a rather tiny (~350 MB) flashable zip file! Look into the [flashing guide](FLASHING.md) on how to proceed.
+Hooray! You've now successfully fully built all of the Sailfish OS source code into a rather tiny (~340 MB) flashable zip file! Look into the [flashing guide](FLASHING.md) on how to proceed.

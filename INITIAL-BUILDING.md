@@ -17,8 +17,7 @@ HOST $
 
 sudo useradd porter -s /bin/bash -m -G wheel -c "SFOS Builder"
 sudo passwd porter
-su porter
-cd
+su - porter
 ```
 
 To make the host environment suitable for building you'll need the following changes made:
