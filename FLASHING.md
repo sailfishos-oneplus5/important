@@ -28,16 +28,13 @@ Check out [this forum post](https://forums.oneplus.com/threads/guide-oneplus-5-h
 
 ## Downgrading firmware & TWRP<a name="downgrading-firmware-twrp"></a>
 
-When using Sailfish OS the current port expects the phone to have Android 8 firmware, so most likely downgrading via TWRP will be required.
+When using Sailfish OS the current port expects the phone to have Android 8 Oreo firmware, so most likely downgrading via TWRP will be required.
 
-1. Fetch the files for [latest O<sub>2</sub>OS 8.1 firmware](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/firmware/firmware_5.1.7_oneplus5.zip/download) and the [TWRP 3.2.3 image](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/recovery/twrp-3.2.3-0-20180822-codeworkx-cheeseburger.img/download) we'll be using.
+1. Fetch the files for [latest O<sub>2</sub>OS 8.1 firmware](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/firmware/firmware_5.1.7_oneplus5.zip/download) and a [TWRP 3.2.3 image](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/recovery/twrp-3.2.3-0-20180822-codeworkx-cheeseburger.img/download).
 2. Flash the firmware zip first and then TWRP image to Recovery partition.
-3. First time flashers should also check `/data` for filesystem issues (make sure it's formatted as `ext4` beforehand!):
+3. First time flashers should also check `/data` for filesystem issues (make sure it's **unmounted** & formatted as **`ext4`** beforehand!):
 ```
-ADB_SHELL #
-
-umount /dev/block/bootdevice/by-name/userdata
-e2fsck /dev/block/bootdevice/by-name/userdata
+ADB_SHELL # e2fsck /dev/block/bootdevice/by-name/userdata
 ```
 4. Before rebooting back to recovery make sure to "Format data"!
 
@@ -45,7 +42,7 @@ e2fsck /dev/block/bootdevice/by-name/userdata
 
 1. Clear data & caches (factory reset)
 2. Flash [the latest LineageOS 15.1 zip from here](https://mega.nz/#F!W9MyDAJJ!riJ5okLw5CVZlqWoTVC_1g) (tested by me and known to work)
-3. (Optional) Flash whatever else you normally have on the Android side (e.g. [OpenGApps](https://opengapps.org/), [Magisk](https://opengapps.org/), [disable dm_verity & force-encrypt](https://zackptg5.com/android.php#disverfe) etc)
+3. (Optional) Flash whatever else you normally have on the Android side (e.g. [OpenGApps](https://opengapps.org/), [Magisk](https://forum.xda-developers.com/apps/magisk/official-magisk-v7-universal-systemless-t3473445/), [disable dm_verity & force-encrypt](https://zackptg5.com/android.php#disverfe) etc)
 4. Flash [your desired SFOS zip](https://mega.nz/#F!KhsWGYzT!nKLttGqwJg0DY-IArUlbdQ) (normally takes ~1 min 30 sec)
 5. Reboot
 
@@ -57,6 +54,6 @@ Once booted for the first time Sailfish OS will always start off with a tutorial
 
 What makes SFOS unique as well is that it doesn't actually touch your `/system` partition (and `/vendor` once I figure stuff out :p), which makes it super easy to dual-boot!
 
-The only limitation is that you'll be stuck on LOS 15.1 (Android 8.1 Oreo) unless you want to start flashing different ROMs for when you boot SFOS than Android, which I really cannot recommend.
+The only limitation is that you'll be stuck on LOS 15.1 (Android 8.1 Oreo) unless you want to start flashing different ROMs, firmware & TWRP versions for when you boot SFOS rather than Android, which I really cannot recommend.
 
 When you've flashed a Sailfish OS zip you can swap between the operating systems without needing wiping anything by simply flashing my [boot-switcher zip](https://git.io/fjPUq) within TWRP.
