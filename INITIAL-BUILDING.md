@@ -50,7 +50,20 @@ mkdir -p $ANDROID_ROOT
 sfossdk
 ```
 
-After entering the Platform SDK prompt, we need to fetch the HADK Android tools for utils such as mkbootimg:
+After entering the Platform SDK you get to choose your first target device! I choce `cheeseburger` as that's the only device I own:
+```
+Which hybris-15.1 device would you like to build for?
+
+  1. cheeseburger (OnePlus 5)
+  2. dumpling     (OnePlus 5T)
+
+Choice: (1/2) 1
+Cloning droid HAL & configs for cheeseburger... done!
+
+Env setup for cheeseburger
+```
+
+When gaining control of the prompt we need to fetch the HADK Android tools for utils such as mkbootimg:
 ```
 PLATFORM_SDK $
 
@@ -66,11 +79,14 @@ In the Platform SDK we use Scratchbox to build packages for the target device ar
 PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
 ```
 
-To verify that the install succeeded, executing `sdk-assistant list` should yield something like this:
+**NOTE:** You can add an entry for another device model by simply choosing it when entering Platform SDK again and installing another target!
+
+To verify that the install(s) have succeeded, executing `sdk-assistant list` should yield something like this:
 ```
 PLATFORM_SDK $ sdk-assistant list
 SailfishOS-3.1.0.12
-`-oneplus-cheeseburger-armv7hl
+|-oneplus-cheeseburger-armv7hl
+`-oneplus-dumpling-armv7hl
 ```
 
 ## Setup the HABUILD SDK

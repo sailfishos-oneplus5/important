@@ -1,14 +1,86 @@
-function hadk() { source $HOME/.hadk.env; echo "Env setup for $DEVICE"; }
-export PS1="PLATFORM_SDK $PS1"
+builder_script="rpm/dhd/helpers/build_packages.sh"
+branch="hybris-16.0"
+[ -d "$ANDROID_ROOT/hardware/qcom/audio-caf/msm8998/policy_hal/" ] && branch="hybris-15.1"
 [ -d /etc/bash_completion.d ] && for i in /etc/bash_completion.d/*; do . $i; done
-hadk
-
+export PS1="PLATFORM_SDK $PS1"
 export HISTFILE="$HOME/.bash_history-sfossdk"
 export RELEASE=`cat /etc/os-release | grep VERSION_ID | cut -d"=" -f2`
 
-builder_script="rpm/dhd/helpers/build_packages.sh"
+alias host="exit"
+alias ha_build="ubu-chroot -r $PLATFORM_SDK_ROOT/sdks/ubuntu"
+alias habuild="ha_build"
+alias build_all_pkgs="build_all_packages"
+alias build_all="build_all_packages"
+alias build_pkgs="build_packages"
+alias build_droid_hal="build_packages -d"
+alias build_hal="build_droid_hal"
+alias build_device_configs="build_packages -c"
+alias build_configs="build_device_configs"
+alias build_cfgs="build_device_configs"
+alias do_mic_build="run_mic_build"
+alias mic_build="run_mic_build"
+alias build_sfos="run_mic_build"
+alias build_sailfish="run_mic_build"
 
-function gen_ks() {
+hadk() {
+	echo
+	source $HOME/.hadk.env
+	echo "Env setup for $DEVICE"
+}
+
+clone_src() {
+	git clone --recurse -b $branch https://github.com/sailfishos-oneplus5/$1 "$ANDROID_ROOT/$2/" &> /dev/null
+}
+
+update_src() {
+	cd "$ANDROID_ROOT/$1/" && git fetch &> /dev/null && git pull &> /dev/null
+}
+
+choose_target() {
+	echo -e "\nWhich $branch device would you like to build for?"
+	echo -e "\n  1. cheeseburger (OnePlus 5)"
+	echo -e "  2. dumpling     (OnePlus 5T)\n"
+	read -p "Choice: (1/2) " target
+
+	# Setup variables
+	device="cheeseburger"
+	[ "$target" = "2" ] && device="dumpling"
+	[ -f "$ANDROID_ROOT/.last_device" ] && last_device="$(<$ANDROID_ROOT/.last_device)"
+
+	if [ "$device" != "$last_device" ]; then
+		if [ ! -z "$last_device" ]; then
+			echo "WARNING: All current changes in SFOS local droid repos WILL be discarded if you continue!"
+			read -p "Would you like to continue? (y/N) " ans
+			ans=`echo "$ans" | xargs | tr "[y]" "[Y]"`
+			if [ "$ans" != "Y" ]; then
+				hadk
+				return 1
+			fi
+
+			echo "Discarded local droid HAL & configs for $last_device!"
+			rm -rf $ANDROID_ROOT/rpm* $ANDROID_ROOT/hybris/droid-{configs,hal-version-}*
+		fi
+
+		printf "Cloning droid HAL & configs for $device..."
+		clone_src "droid-hal-$device" "rpm" &&
+		clone_src "droid-config-$device" "hybris/droid-configs" &&
+		clone_src "droid-hal-version-$device" "hybris/droid-hal-version-$device"
+		(( $? == 0 )) && echo " done!" || echo " fail! exit code: $?"
+
+		echo "$device" > "$ANDROID_ROOT/.last_device"
+	else
+		printf "Updating droid HAL & configs for $device..."
+		update_src "rpm" &&
+		update_src "hybris/droid-configs" &&
+		update_src "hybris/droid-hal-version-$device"
+		(( $? == 0 )) && echo " done!" || echo " fail! exit code: $?"
+	fi
+
+	sed "s/DEVICE=.*/DEVICE=\"$device\"/" -i $HOME/.hadk.env
+	hadk
+}
+
+gen_ks() {
 	echo '$ HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@"' &&
 	HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@" &&
 	echo '$ HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@"' &&
@@ -21,14 +93,14 @@ function gen_ks() {
 	hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh
 }
 
-function build_all_packages() {
+build_all_packages() {
 	cd $ANDROID_ROOT
 
 	echo "$ $builder_script $@"
 	$builder_script $@ && gen_ks
 }
 
-function build_packages() {
+build_packages() {
 	cd $ANDROID_ROOT
 
 	if (( $# == 0 )); then
@@ -42,12 +114,12 @@ function build_packages() {
 	[[ $@ == *"-c"* || $@ == *"--configs"* ]] && gen_ks
 }
 
-function run_mic_build() {
+run_mic_build() {
 	if [ -z $UPDATES_CHECKED ]; then
 		# Function to compare version strings
 		vercomp() {
 			[ "$1" = "$2" ] && return 0 # =
-			[ "$1" = "`printf "$1\n$2" | sort -t '.' -k 1,1 -k 2,2 -k 3,3 -k 4,4 -g | head -1`" ] && return 1 # <
+			[ "$1" = `printf "$1\n$2" | sort -t '.' -k 1,1 -k 2,2 -k 3,3 -k 4,4 -g | head -1` ] && return 1 # <
 			return 2 # >
 		}
 
@@ -94,19 +166,4 @@ function run_mic_build() {
 	$cmd
 }
 
-alias ha_build="ubu-chroot -r $PLATFORM_SDK_ROOT/sdks/ubuntu"
-alias habuild="ha_build"
-
-alias build_all_pkgs="build_all_packages"
-alias build_all="build_all_packages"
-alias build_pkgs="build_packages"
-alias build_droid_hal="build_packages -d"
-alias build_hal="build_droid_hal"
-alias build_device_configs="build_packages -c"
-alias build_configs="build_device_configs"
-alias build_cfgs="build_device_configs"
-
-alias do_mic_build="run_mic_build"
-alias mic_build="run_mic_build"
-alias build_sfos="run_mic_build"
-alias build_sailfish="run_mic_build"
+choose_target
