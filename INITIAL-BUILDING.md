@@ -52,7 +52,7 @@ sfossdk
 
 After entering the Platform SDK you get to choose your first target device! I choce `cheeseburger` as that's the only device I own:
 ```
-Which hybris-15.1 device would you like to build for?
+Which hybris-16.0 device would you like to build for?
 
   1. cheeseburger (OnePlus 5)
   2. dumpling     (OnePlus 5T)
@@ -127,8 +127,8 @@ When everything is ready to go we can finally init the local source repository:
 HA_BUILD $
 
 cd $ANDROID_ROOT
-repo init -u git://github.com/mer-hybris/android.git -b hybris-15.1 --depth 1
-git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-15.1 .repo/local_manifests/
+repo init -u git://github.com/mer-hybris/android.git -b hybris-16.0 --depth 1
+git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-16.0 .repo/local_manifests/
 ```
 
 Now that the repo is initialized you can start [syncing the local repository](BUILDING.md#syncing-local-repository) as per the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.

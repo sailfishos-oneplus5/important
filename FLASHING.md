@@ -3,7 +3,7 @@
 ### Table of Contents
 * [Disclaimer](#disclaimer)
 * [Unlocking the device](#unlocking-the-device)
-* [Downgrading firmware & TWRP](#downgrading-firmware-twrp)
+* [Firmware & TWRP](#firmware-twrp)
 * [Flashing steps](#flashing-steps)
 * [Skipping tutorial](#skipping-tutorial)
 * [Dual-booting with LineageOS](#dual-booting-with-lineageos)
@@ -26,11 +26,11 @@
 
 Check out [this forum post](https://forums.oneplus.com/threads/guide-oneplus-5-how-to-unlock-bootloader-flash-twrp-root-nandroid-efs-backup-and-more.548216/), rooting can be ignored as the system will be wiped fully anyways afterwards.
 
-## Downgrading firmware & TWRP<a name="downgrading-firmware-twrp"></a>
+## Firmware & TWRP<a name="firmware-twrp"></a>
 
-When using Sailfish OS the current port expects the phone to have Android 8 Oreo firmware, so most likely downgrading via TWRP will be required.
+When using Sailfish OS the current port expects the phone to have Android 9 Pie firmware.
 
-1. Fetch the files for latest O<sub>2</sub>OS 8.1 firmware ([OP5 / cheeseburger](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/firmware/firmware_5.1.7_oneplus5.zip/download) | [OP5T / dumpling](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/dumpling/firmware/firmware_5.1.7_oneplus5t.zip/download)) and a TWRP 3.2.3 image ([OP5 / cheeseburger](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/cheeseburger/recovery/twrp-3.2.3-0-20180822-codeworkx-cheeseburger.img/download) | [OP5T / dumpling](https://sourceforge.net/projects/cheeseburgerdumplings/files/15.1/dumpling/recovery/twrp-3.2.3-0-20180822-codeworkx-dumpling.img/download)).
+1. Fetch the files for latest O<sub>2</sub>OS 9.0 firmware ([OP5 / cheeseburger](https://sourceforge.net/projects/cheeseburgerdumplings/files/16.0/cheeseburger/firmware/) | [OP5T / dumpling](https://sourceforge.net/projects/cheeseburgerdumplings/files/16.0/dumpling/firmware/)) and a TWRP >=3.3.x image ([OP5 / cheeseburger](https://sourceforge.net/projects/cheeseburgerdumplings/files/16.0/cheeseburger/recovery/) | [OP5T / dumpling](https://sourceforge.net/projects/cheeseburgerdumplings/files/16.0/dumpling/recovery/)).
 2. Flash the firmware zip first and then TWRP image to Recovery partition.
 3. First time flashers should also check `/data` for filesystem issues (make sure it's **unmounted** & formatted as **`ext4`** beforehand!):
 ```
@@ -41,7 +41,7 @@ ADB_SHELL # e2fsck /dev/block/bootdevice/by-name/userdata
 ## Flashing steps
 
 1. Clear data & caches (factory reset)
-2. Flash [the latest LineageOS 15.1 zip for your device from here](https://mega.nz/#F!W9MyDAJJ!riJ5okLw5CVZlqWoTVC_1g) (tested and known to work)
+2. Flash a recent official LineageOS 16.0 zip ([OP5 / cheeseburger](https://download.lineageos.org/cheeseburger) | [OP5T / dumpling](https://download.lineageos.org/dumpling))
 3. (Optional) Flash whatever else you normally have on the Android side (e.g. [OpenGApps](https://opengapps.org/), [Magisk](https://forum.xda-developers.com/apps/magisk/official-magisk-v7-universal-systemless-t3473445/), [disable dm_verity & force-encrypt](https://zackptg5.com/android.php#disverfe) etc)
 4. Flash [your desired SFOS zip](https://mega.nz/#F!KhsWGYzT!nKLttGqwJg0DY-IArUlbdQ) (normally takes ~1 min 30 sec)
 5. Reboot
@@ -53,7 +53,5 @@ Once booted for the first time Sailfish OS will always start off with a tutorial
 ## Dual-booting with LineageOS
 
 What makes SFOS unique as well is that it doesn't actually touch your `/system` partition (and `/vendor` once I figure stuff out :p), which makes it super easy to dual-boot!
-
-The only limitation is that you'll be stuck on LOS 15.1 (Android 8.1 Oreo) unless you want to start flashing different ROMs, firmware & TWRP versions for when you boot SFOS rather than Android, which I really cannot recommend.
 
 When you've flashed a Sailfish OS zip you can swap between the operating systems without needing wiping anything by simply flashing my [boot-switcher zip](https://git.io/fjPUq) within TWRP.

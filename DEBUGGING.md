@@ -11,11 +11,11 @@
 
 ## Device reboots to fastboot
 
-For me this has happened when flashing the wrong LineageOS 15.1 zip. Double-check that the zip I've mentioned in the [flashing guide](FLASHING.md#flashing-steps) matches yours unless you know what you are doing!
+For me this has happened when flashing the wrong LineageOS 16.0 zip. Double-check that the zip I've mentioned in the [flashing guide](FLASHING.md#flashing-steps) matches yours unless you know what you are doing!
 
 ## Can't get past setup / lockscreen<a name="cant-get-past-setup-lockscreen"></a>
 
-In my experience this usually happens when you **DON'T** flash the LineageOS 15.1 zip before SFOS zip (e.g. after testing everything & wiping all but `/system`). Please make sure you followed the [flashing guide](FLASHING.md) fully!
+In my experience this usually happens when you **DON'T** flash the LineageOS 16.0 zip before SFOS zip (e.g. after testing everything & wiping all but `/system`). Please make sure you followed the [flashing guide](FLASHING.md) fully!
 
 I've also noticed some other e.g. `unofficial` LineageOS builds causing this behavior as well.
 

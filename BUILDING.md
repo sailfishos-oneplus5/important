@@ -40,12 +40,12 @@ HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-clone-bundle --no-tags
 
 If this is your first time building, execute the following line to finalize the environment:
 ```
-HA_BUILD $ . build/envsetup.sh && breakfast $DEVICE && export USE_CCACHE=1
+HA_BUILD $ hybris-patches/apply-patches.sh --mb && . build/envsetup.sh && breakfast $DEVICE && export USE_CCACHE=1
 ```
 
 ## Building HAL parts
 
-Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 6 minutes on 16 Zen 2 threads (R7 3700X) for the first time. To start the process, enter:
+Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 9 minutes on 16 Zen 2 threads (R7 3700X) for the first time. To start the process, enter:
 ```
 HA_BUILD $ mka hybris-hal
 ```
@@ -53,6 +53,7 @@ HA_BUILD $ mka hybris-hal
 **NOTE:** If this was your first time building the droid HAL side, the following needs to be also executed (this is explained more in [building extra packages](INITIAL-BUILDING.md#building-extra-packages) under the [initial building guide](INITIAL-BUILDING.md) & shouldn't take very long):
 ```
 gettargetarch > lunch_arch
+sed "s/Werror/Werror -Wno-unused-parameter/" -i frameworks/av/services/camera/libcameraservice/Android.mk
 mka $(external/droidmedia/detect_build_targets.sh $PORT_ARCH)
 mka $(external/audioflingerglue/detect_build_targets.sh $PORT_ARCH)
 ```
