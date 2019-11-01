@@ -74,7 +74,7 @@ sudo zypper --non-interactive in android-tools-hadk bc
 
 ## Adding SFOS build target
 
-In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.1.0.12` at the time of writing, the following command should be run:
+In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.2.0.12` at the time of writing, the following command should be run:
 ```
 PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
 ```
@@ -84,7 +84,7 @@ PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http:/
 To verify that the install(s) have succeeded, executing `sdk-assistant list` should yield something like this:
 ```
 PLATFORM_SDK $ sdk-assistant list
-SailfishOS-3.1.0.12
+SailfishOS-3.2.0.12
 |-oneplus-cheeseburger-armv7hl
 `-oneplus-dumpling-armv7hl
 ```
@@ -135,11 +135,11 @@ Now that the repo is initialized you can start [syncing the local repository](BU
 
 ## Building extra packages
 
-These extra packages are responsible for fixing video recording, working call audio and device specific features such as notification slider & display off gestures. They aren't built by default, so that's why we'll be building them next:
+These extra packages are responsible for working camera, video playback & recording etc. They aren't built by default, so that's why we'll be building them next:
 ```
 PLATFORM_SDK $
 
-DROIDMEDIA_VERSION=0.20191011.0
+DROIDMEDIA_VERSION=0.20191025.0
 rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION
 mkdir -p hybris/mw/droidmedia-localbuild/rpm
 cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
@@ -159,6 +159,6 @@ rpm/dhd/helpers/build_packages.sh --mw=https://github.com/mer-hybris/pulseaudio-
 
 build_device_configs
 ```
-**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/fjMe2) and [AUDIOFLINGERGLUE_VERSION](https://git.io/JeG4v) values with their latest versions if they are different.
+**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/JeE10) and [AUDIOFLINGERGLUE_VERSION](https://git.io/JeG4v) values with their latest versions if they are different.
 
 Once you're done you can check out [building the SFOS rootfs](BUILDING.md#building-the-sfos-rootfs) over on the [regular building guide](BUILDING.md).

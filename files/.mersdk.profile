@@ -1,6 +1,5 @@
 builder_script="rpm/dhd/helpers/build_packages.sh"
 branch="hybris-16.0"
-[ -d "$ANDROID_ROOT/hardware/qcom/audio-caf/msm8998/policy_hal/" ] && branch="hybris-15.1"
 [ -d /etc/bash_completion.d ] && for i in /etc/bash_completion.d/*; do . $i; done
 export PS1="PLATFORM_SDK $PS1"
 export HISTFILE="$HOME/.bash_history-sfossdk"
@@ -80,24 +79,11 @@ choose_target() {
 	hadk
 }
 
-gen_ks() {
-	echo '$ HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@"' &&
-	HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@" &&
-	echo '$ HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@"' &&
-	HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@" &&
-	echo '$ KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks"' &&
-	KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks" &&
-	echo '$ sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS' &&
-	sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS &&
-	echo '$ hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh' &&
-	hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh
-}
-
 build_all_packages() {
 	cd $ANDROID_ROOT
 
 	echo "$ $builder_script $@"
-	$builder_script $@ && gen_ks
+	$builder_script $@
 }
 
 build_packages() {
@@ -110,8 +96,6 @@ build_packages() {
 
 	echo "$ $builder_script $@"
 	$builder_script $@ || return
-	
-	[[ $@ == *"-c"* || $@ == *"--configs"* ]] && gen_ks
 }
 
 run_mic_build() {
@@ -161,9 +145,7 @@ run_mic_build() {
 		UPDATES_CHECKED=1
 	fi
 
-	local cmd="sudo mic create fs --arch=$PORT_ARCH --tokenmap=ARCH:$PORT_ARCH,RELEASE:$RELEASE,EXTRA_NAME:$EXTRA_NAME --record-pkgs=name,url --outdir=sfe-$DEVICE-$RELEASE$EXTRA_NAME --pack-to=sfe-$DEVICE-$RELEASE$EXTRA_NAME.tar.bz2 $ANDROID_ROOT/Jolla-@RELEASE@-$DEVICE-@ARCH@.ks"
-	echo "$ $cmd"
-	$cmd
+	build_packages -i
 }
 
 choose_target
