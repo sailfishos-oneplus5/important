@@ -7,7 +7,6 @@
 * [Setup the HABUILD SDK](#setup-the-habuild-sdk)
 * [Cleaning up](#cleaning-up)
 * [Initializing local repo](#initializing-local-repo)
-* [Building extra packages](#building-extra-packages)
 
 ## Starting from ground zero
 
@@ -131,34 +130,4 @@ repo init -u git://github.com/mer-hybris/android.git -b hybris-16.0 --depth 1
 git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-16.0 .repo/local_manifests/
 ```
 
-Now that the repo is initialized you can start [syncing the local repository](BUILDING.md#syncing-local-repository) as per the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.
-
-## Building extra packages
-
-These extra packages are responsible for working camera, video playback & recording etc. They aren't built by default, so that's why we'll be building them next:
-```
-PLATFORM_SDK $
-
-DROIDMEDIA_VERSION=0.20191025.0
-rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION
-mkdir -p hybris/mw/droidmedia-localbuild/rpm
-cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
-sed "s/0.0.0/$DROIDMEDIA_VERSION/" -i hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
-mv hybris/mw/droidmedia-$DROIDMEDIA_VERSION.tgz hybris/mw/droidmedia-localbuild
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/droidmedia-localbuild
-rpm/dhd/helpers/build_packages.sh --mw=https://github.com/sailfishos/gst-droid.git
-
-AUDIOFLINGERGLUE_VERSION=0.0.13
-rpm/dhd/helpers/pack_source_audioflingerglue-localbuild.sh $AUDIOFLINGERGLUE_VERSION
-mkdir -p hybris/mw/audioflingerglue-localbuild/rpm
-cp rpm/dhd/helpers/audioflingerglue-localbuild.spec hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
-sed "s/0.0.0/$AUDIOFLINGERGLUE_VERSION/" -i hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
-mv hybris/mw/audioflingerglue-$AUDIOFLINGERGLUE_VERSION.tgz hybris/mw/audioflingerglue-localbuild
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/audioflingerglue-localbuild
-rpm/dhd/helpers/build_packages.sh --mw=https://github.com/mer-hybris/pulseaudio-modules-droid-glue.git
-
-build_device_configs
-```
-**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/JeE10) and [AUDIOFLINGERGLUE_VERSION](https://git.io/JeG4v) values with their latest versions if they are different.
-
-Once you're done you can check out [building the SFOS rootfs](BUILDING.md#building-the-sfos-rootfs) over on the [regular building guide](BUILDING.md).
+Now that the repo is initialized you can start [syncing the local repository](BUILDING.md#syncing-local-repository) as per the [regular porting guide](BUILDING.md).

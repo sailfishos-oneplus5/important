@@ -3,7 +3,6 @@
 ### Table of Contents
 * [Device reboots to fastboot](#device-reboots-to-fastboot)
 * [Can't get past setup / lockscreen](#cant-get-past-setup-lockscreen)
-* [Broken Wi-Fi on Android](#broken-wifi-android)
 * [Getting telnet](#getting-telnet)
 * [Debugging via SSH](#debugging-via-ssh)
 * [Stracing binaries](#stracing-binaries)
@@ -19,12 +18,6 @@ For me this has happened when flashing the wrong LineageOS 16.0 zip. Double-chec
 In my experience this usually happens when you **DON'T** flash the LineageOS 16.0 zip before SFOS zip (e.g. after testing everything & wiping all but `/system`). Please make sure you followed the [flashing guide](FLASHING.md) fully!
 
 I've also noticed some other e.g. `unofficial` LineageOS builds causing this behavior as well.
-
-## Broken Wi-Fi on Android<a name="broken-wifi-android"></a>
-
-The few times this has happened to me it has always been **outdated firmware** being used in conjunction with a **brand new** LineageOS zip (that required newer firmware than was already installed).
-
-Make sure to always [update your firmware](FLASHING.md#firmware-twrp) if necessary!
 
 ## Getting telnet
 

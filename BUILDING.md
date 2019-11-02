@@ -43,7 +43,7 @@ If this is your first time building, execute the following line to finalize the 
 HA_BUILD $ hybris-patches/apply-patches.sh --mb && . build/envsetup.sh && breakfast $DEVICE && export USE_CCACHE=1
 ```
 
-**NOTE:** It's possible (and required before syncing again) to use `repo sync -l` to reset your cloned repos to their pre-patch states, however at the cost of losing **any and all** unsaved local changes!
+It's possible and **required before syncing again** to use `repo sync -l` to reset your cloned repos to their pre-patch states, however at the cost of losing **any and all** local-only changes!
 
 ## Building HAL parts
 
@@ -52,7 +52,7 @@ Now we will build the required parts of LineageOS for HAL to function properly u
 HA_BUILD $ mka hybris-hal
 ```
 
-**NOTE:** If this was your first time building the droid HAL side, the following needs to be also executed (this is explained more in [building extra packages](INITIAL-BUILDING.md#building-extra-packages) under the [initial building guide](INITIAL-BUILDING.md) & shouldn't take very long):
+**NOTE:** If this was your first time building the droid HAL side, the following needs to be also executed for working camera, video playback & recording etc; this shouldn't take very long:
 ```
 echo "MINIMEDIA_AUDIOPOLICYSERVICE_ENABLE := 1" > external/droidmedia/env.mk
 sed "s/Werror/Werror -Wno-unused-parameter/" -i frameworks/av/services/camera/libcameraservice/Android.mk
@@ -71,8 +71,6 @@ Most likely Sailfish OS packages will need to be built many times during develop
 ```
 PLATFORM_SDK $ build_all_packages
 ```
-
-**NOTE:** If this was your first time running the command, see [building extra packages](INITIAL-BUILDING.md#building-extra-packages) under the [initial building guide](INITIAL-BUILDING.md) next.
 
 When just droid configs have been modified, `build_device_configs` will be enough. Same goes for droid HAL stuff with `build_droid_hal` instead. Building with these commands instead will be substantially faster than rebuilding everything (which is unnecessary 99% of the time anyways).
 
