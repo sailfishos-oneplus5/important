@@ -4,8 +4,7 @@
 * [Build environments](#build-environments)
 * [Syncing local repository](#syncing-local-repository)
 * [Building HAL parts](#building-hal-parts)
-* [Building SFOS packages](#building-sfos-packages)
-* [Building the SFOS rootfs](#building-the-sfos-rootfs)
+* [Building SFOS packages & rootfs](#building-sfos-packages-rootfs)
 
 ## Build environments
 
@@ -65,24 +64,17 @@ During the `hybris-hal` build process `hybris-*.img` boot images in `out/target/
 HA_BUILD $ mka hybris-boot
 ```
 
-## Building SFOS packages
+## Building SFOS packages & rootfs<a name="building-sfos-packages-rootfs"></a>
 
-Most likely Sailfish OS packages will need to be built many times during development. To selectively build / rebuild **everything**, run the following command (full build takes ~15 minutes for me):
+To start (re)building all locally required SFOS packages & the rootfs, run the following command (full build takes ~20 minutes for me):
 ```
 PLATFORM_SDK $ build_all_packages
 ```
 
-When just droid configs have been modified, `build_device_configs` will be enough. Same goes for droid HAL stuff with `build_droid_hal` instead. Building with these commands instead will be substantially faster than rebuilding everything (which is unnecessary 99% of the time anyways).
+As the rootfs `mic` build command line is now included in `build_packages.sh` steps, this is all you need to get a rather tiny (~340 MB) flashable SFOS zip file! Look into the [flashing guide](FLASHING.md) on how to proceed afterwards.
 
 If instead you'd like to refresh your existing local copies by pulling updates and rebuilding, you can simply use the `-p` flag e.g. use `build_all_packages -p` to update & rebuild everything.
 
-## Building the SFOS rootfs
+When just droid configs have been modified, `build_device_configs` will be enough. Same goes for droid HAL stuff with `build_droid_hal` instead. Building with these commands instead will be substantially faster than rebuilding everything (which is unnecessary 99% of the time anyways).
 
-This is the final step in building stuff. By default the latest public release will be build from the [version history](https://en.wikipedia.org/wiki/Sailfish_OS#Version_history). Any other public build (with the proper tooling installed) can be built by defining `RELEASE=x.y.z`. The `mic` build process averages ~7 minutes for me.
-
-After this you should have a flashable Sailfish OS & boot switcher zips in `sfe-$DEVICE-*/`:
-```
-PLATFORM_SDK $ run_mic_build
-```
-
-Hooray! You've now successfully fully built all of the Sailfish OS source code into a rather tiny (~340 MB) flashable zip file! Look into the [flashing guide](FLASHING.md) on how to proceed.
+The rootfs build can still be triggered manually too if required via `run_mic_build`. This makes sense if you've just modified `droid-configs` for example and have no need to rebuild all packages for no reason again :)
