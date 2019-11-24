@@ -31,7 +31,7 @@ HOST $
 
 mkdir ~/bin
 curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-chmod a+x ~/bin/repo
+chmod +x ~/bin/repo
 ```
 
 ## Setup the Platform SDK
@@ -66,8 +66,8 @@ When gaining control of the prompt we need to fetch the HADK Android tools for u
 ```
 PLATFORM_SDK $
 
-sudo zypper ref
-sudo zypper --non-interactive in android-tools-hadk bc
+sudo zypper ref -f
+sudo zypper --non-interactive in bc pigz atruncate android-tools-hadk
 ```
 **NOTE:** Repository errors for `adaptation0` can be safely ignored here and in the future.
 
@@ -116,7 +116,7 @@ git config --global user.email "your@email.com"
 
 Once you can enter both PLATFORM_SDK and HA_BUILD environments, you can safely delete the leftover chroot filesystem archives from your home directory:
 ```
-HA_BUILD $ cd && rm Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2 ubuntu-trusty-*-android-rootfs.tar.bz2
+HA_BUILD $ cd && rm Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2 ubuntu-*-android-rootfs.tar.bz2
 ```
 
 ## Initializing local repo
@@ -126,7 +126,7 @@ When everything is ready to go we can finally init the local source repository:
 HA_BUILD $
 
 cd $ANDROID_ROOT
-repo init -u git://github.com/mer-hybris/android.git -b hybris-16.0 --depth 1
+repo init -u git://github.com/sailfishos-oneplus5/android.git -b hybris-16.0 --depth 1
 git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-16.0 .repo/local_manifests/
 ```
 

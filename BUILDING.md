@@ -32,7 +32,7 @@ PLATFORM_SDK $
 
 At this point the process of downloading source code for LineageOS and libhybris will start. This will also be done when updating source code repos.
 
-At first this may take a while depending on your internet connection speed (with 200 mbit/s it'll take ~10 mins for reference):
+At first this may take a while depending on your internet connection speed (with 200 mbit/s it'll take ~8 mins for reference):
 ```
 HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-clone-bundle --no-tags
 ```
@@ -42,7 +42,17 @@ If this is your first time building, execute the following line to finalize the 
 HA_BUILD $ hybris-patches/apply-patches.sh --mb && . build/envsetup.sh && breakfast $DEVICE && export USE_CCACHE=1
 ```
 
-It's possible and **required before syncing again** to use `repo sync -l` to reset your cloned repos to their pre-patch states, however at the cost of losing **any and all** local-only changes!
+Next up apply the following `libhybris` patch to get working audio on the port:
+```
+HA_BUILD $
+
+cd external/libhybris/libhybris/
+git remote add krnlyng https://github.com/krnlyng/libhybris
+git fetch krnlyng
+git cherry-pick 19829c0e2fcc60220ef5111cd4cda12a74c9f4d5; cd -
+```
+
+**NOTE:** It's possible and **required before syncing again** to use `repo sync -l` to reset your cloned repos to their pre-patch states, however at the cost of losing **any and all** local-only changes!
 
 ## Building HAL parts
 
@@ -66,14 +76,12 @@ HA_BUILD $ mka hybris-boot
 
 ## Building SFOS packages & rootfs<a name="building-sfos-packages-rootfs"></a>
 
-To start (re)building all locally required SFOS packages & the rootfs, run the following command (full build takes ~20 minutes for me):
+To pull updates and start (re)building all locally required SFOS packages & the rootfs, run the following command (full build takes ~20 minutes for me):
 ```
 PLATFORM_SDK $ build_all_packages
 ```
 
 As the rootfs `mic` build command line is now included in `build_packages.sh` steps, this is all you need to get a rather tiny (~340 MB) flashable SFOS zip file! Look into the [flashing guide](FLASHING.md) on how to proceed afterwards.
-
-If instead you'd like to refresh your existing local copies by pulling updates and rebuilding, you can simply use the `-p` flag e.g. use `build_all_packages -p` to update & rebuild everything.
 
 When just droid configs have been modified, `build_device_configs` will be enough. Same goes for droid HAL stuff with `build_droid_hal` instead. Building with these commands instead will be substantially faster than rebuilding everything (which is unnecessary 99% of the time anyways).
 

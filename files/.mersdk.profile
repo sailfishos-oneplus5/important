@@ -20,6 +20,13 @@ alias do_mic_build="run_mic_build"
 alias mic_build="run_mic_build"
 alias build_sfos="run_mic_build"
 alias build_sailfish="run_mic_build"
+alias build_img="run_mic_build"
+alias build_image="run_mic_build"
+alias reset_droid_repos="sudo rm -rf $ANDROID_ROOT/rpm/ $ANDROID_ROOT/hybris/droid-{configs,hal-version-cheeseburger}* $ANDROID_ROOT/droid-hal-cheeseburger.log $ANDROID_ROOT/.last_device; choose_target"
+alias reset_repos="reset_droid_repos"
+alias choose_device="choose_target"
+alias switch_target="choose_target"
+alias switch_device="choose_target"
 
 hadk() {
 	echo
@@ -32,7 +39,7 @@ clone_src() {
 }
 
 update_src() {
-	cd "$ANDROID_ROOT/$1/" && git fetch &> /dev/null && git pull &> /dev/null
+	cd "$ANDROID_ROOT/$1/" && git fetch &> /dev/null && git pull --recurse-submodules &> /dev/null
 }
 
 choose_target() {
@@ -120,7 +127,7 @@ run_mic_build() {
 		if (( $res == 0 )); then
 			# TODO Check if installed tooling is latest available from http://releases.sailfishos.org/sdk/targets/
 
-			# Only use latest tooling if it's actually newer
+			# Only use "latest version" if it's actually newer
 			vercomp "$LATEST_RELEASE" "$RELEASE"
 			res=$?
 			if (( $res == 2 )); then
