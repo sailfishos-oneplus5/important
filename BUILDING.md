@@ -49,7 +49,7 @@ HA_BUILD $
 cd external/libhybris/libhybris/
 git remote add krnlyng https://github.com/krnlyng/libhybris
 git fetch krnlyng
-git cherry-pick 19829c0e2fcc60220ef5111cd4cda12a74c9f4d5; cd -
+git cherry-pick a4fce79659ed18dd685f89cd55cf30206115b0da; cd -
 ```
 
 **NOTE:** It's possible and **required before syncing again** to use `repo sync -l` to reset your cloned repos to their pre-patch states, however at the cost of losing **any and all** local-only changes!
