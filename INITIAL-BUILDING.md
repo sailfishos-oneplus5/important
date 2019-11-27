@@ -49,7 +49,7 @@ mkdir -p $ANDROID_ROOT
 sfossdk
 ```
 
-After entering the Platform SDK you get to choose your first target device! I choce `cheeseburger` as that's the only device I own:
+After entering the Platform SDK you get to choose your first target device! I chose `cheeseburger` as that's the only device I own:
 ```
 Which hybris-16.0 device would you like to build for?
 
