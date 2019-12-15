@@ -42,16 +42,6 @@ If this is your first time building, execute the following line to finalize the 
 HA_BUILD $ hybris-patches/apply-patches.sh --mb && . build/envsetup.sh && breakfast $DEVICE && export USE_CCACHE=1
 ```
 
-Next up apply the following `libhybris` patch to get working audio on the port:
-```
-HA_BUILD $
-
-cd external/libhybris/libhybris/
-git remote add krnlyng https://github.com/krnlyng/libhybris
-git fetch krnlyng
-git cherry-pick a4fce79659ed18dd685f89cd55cf30206115b0da; cd -
-```
-
 **NOTE:** It's possible and **required before syncing again** to use `repo sync -l` to reset your cloned repos to their pre-patch states, however at the cost of losing **any and all** local-only changes!
 
 ## Building HAL parts
@@ -65,8 +55,7 @@ HA_BUILD $ mka hybris-hal
 ```
 echo "MINIMEDIA_AUDIOPOLICYSERVICE_ENABLE := 1" > external/droidmedia/env.mk
 sed "s/Werror/Werror -Wno-unused-parameter/" -i frameworks/av/services/camera/libcameraservice/Android.mk
-mka droidmedia
-mka audioflingerglue
+mka droidmedia audioflingerglue
 ```
 
 During the `hybris-hal` build process `hybris-*.img` boot images in `out/target/product/$DEVICE/` will be generated. When kernel and other Android side changes are done afterwards the image can be regenerated using:
