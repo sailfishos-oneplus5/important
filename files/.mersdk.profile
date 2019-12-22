@@ -1,5 +1,4 @@
 builder_script="rpm/dhd/helpers/build_packages.sh"
-branch="hybris-16.0"
 [ -d /etc/bash_completion.d ] && for i in /etc/bash_completion.d/*; do . $i; done
 export PS1="PLATFORM_SDK $PS1"
 export HISTFILE="$HOME/.bash_history-sfossdk"
@@ -35,15 +34,20 @@ hadk() {
 }
 
 clone_src() {
-	git clone --recurse -b $branch https://github.com/sailfishos-oneplus5/$1 "$ANDROID_ROOT/$2/" &> /dev/null
+	path="$ANDROID_ROOT/$3/"
+	mkdir -p "$path"
+	git clone --recurse -b $2 https://github.com/sailfishos-oneplus5/$1 "$path" &> /dev/null
 }
 
 update_src() {
-	cd "$ANDROID_ROOT/$1/" && git fetch &> /dev/null && git pull --recurse-submodules &> /dev/null
+	path="$ANDROID_ROOT/$1/"
+	[ ! -d "$path" ] && exit 1
+	# TODO: Fix updating properly; force all unless local changes detected?
+	cd "$path" && git fetch &> /dev/null && git pull --recurse-submodules &> /dev/null
 }
 
 choose_target() {
-	echo -e "\nWhich $branch device would you like to build for?"
+	echo -e "\nWhich hybris-16.0 device would you like to build for?"
 	echo -e "\n  1. cheeseburger (OnePlus 5)"
 	echo -e "  2. dumpling     (OnePlus 5T)\n"
 	read -p "Choice: (1/2) " target
@@ -51,6 +55,8 @@ choose_target() {
 	# Setup variables
 	device="cheeseburger"
 	[ "$target" = "2" ] && device="dumpling"
+	branch="master"
+	[ "$device" = "dumpling" ] && branch="dumpling"
 	[ -f "$ANDROID_ROOT/.last_device" ] && last_device="$(<$ANDROID_ROOT/.last_device)"
 
 	if [ "$device" != "$last_device" ]; then
@@ -68,9 +74,9 @@ choose_target() {
 		fi
 
 		printf "Cloning droid HAL & configs for $device..."
-		clone_src "droid-hal-$device" "rpm" &&
-		clone_src "droid-config-$device" "hybris/droid-configs" &&
-		clone_src "droid-hal-version-$device" "hybris/droid-hal-version-$device"
+		clone_src "droid-hal-cheeseburger" "$branch" "rpm" &&
+		clone_src "droid-config-cheeseburger" "$branch" "hybris/droid-configs" &&
+		clone_src "droid-hal-version-cheeseburger" "$branch" "hybris/droid-hal-version-$device"
 		(( $? == 0 )) && echo " done!" || echo " fail! exit code: $?"
 
 		echo "$device" > "$ANDROID_ROOT/.last_device"
