@@ -1,6 +1,4 @@
 builder_script="rpm/dhd/helpers/build_packages.sh"
-branch="hybris-16.0"
-[ -d "$ANDROID_ROOT/hardware/qcom/audio-caf/msm8998/policy_hal/" ] && branch="hybris-15.1"
 [ -d /etc/bash_completion.d ] && for i in /etc/bash_completion.d/*; do . $i; done
 export PS1="PLATFORM_SDK $PS1"
 export HISTFILE="$HOME/.bash_history-sfossdk"
@@ -21,6 +19,13 @@ alias do_mic_build="run_mic_build"
 alias mic_build="run_mic_build"
 alias build_sfos="run_mic_build"
 alias build_sailfish="run_mic_build"
+alias build_img="run_mic_build"
+alias build_image="run_mic_build"
+alias reset_droid_repos="sudo rm -rf $ANDROID_ROOT/rpm/ $ANDROID_ROOT/hybris/droid-{configs,hal-version-$DEVICE}* $ANDROID_ROOT/droid-hal-$DEVICE.log $ANDROID_ROOT/.last_device; unset last_device; choose_target"
+alias reset_repos="reset_droid_repos"
+alias choose_device="choose_target"
+alias switch_target="choose_target"
+alias switch_device="choose_target"
 
 hadk() {
 	echo
@@ -29,15 +34,20 @@ hadk() {
 }
 
 clone_src() {
-	git clone --recurse -b $branch https://github.com/sailfishos-oneplus5/$1 "$ANDROID_ROOT/$2/" &> /dev/null
+	path="$ANDROID_ROOT/$3/"
+	mkdir -p "$path"
+	git clone --recurse -b $2 https://github.com/sailfishos-oneplus5/$1 "$path" &> /dev/null
 }
 
 update_src() {
-	cd "$ANDROID_ROOT/$1/" && git fetch &> /dev/null && git pull &> /dev/null
+	path="$ANDROID_ROOT/$1/"
+	[ ! -d "$path" ] && exit 1
+	# TODO: Fix updating properly; force all unless local changes detected?
+	cd "$path" && git fetch &> /dev/null && git pull --recurse-submodules &> /dev/null
 }
 
 choose_target() {
-	echo -e "\nWhich $branch device would you like to build for?"
+	echo -e "\nWhich hybris-15.1 device would you like to build for?"
 	echo -e "\n  1. cheeseburger (OnePlus 5)"
 	echo -e "  2. dumpling     (OnePlus 5T)\n"
 	read -p "Choice: (1/2) " target
@@ -45,6 +55,8 @@ choose_target() {
 	# Setup variables
 	device="cheeseburger"
 	[ "$target" = "2" ] && device="dumpling"
+	branch="hybris-15.1"
+	[ "$device" = "dumpling" ] && branch="dumpling-15.1"
 	[ -f "$ANDROID_ROOT/.last_device" ] && last_device="$(<$ANDROID_ROOT/.last_device)"
 
 	if [ "$device" != "$last_device" ]; then
@@ -62,9 +74,9 @@ choose_target() {
 		fi
 
 		printf "Cloning droid HAL & configs for $device..."
-		clone_src "droid-hal-$device" "rpm" &&
-		clone_src "droid-config-$device" "hybris/droid-configs" &&
-		clone_src "droid-hal-version-$device" "hybris/droid-hal-version-$device"
+		clone_src "droid-hal-cheeseburger" "$branch" "rpm" &&
+		clone_src "droid-config-cheeseburger" "$branch" "hybris/droid-configs" &&
+		clone_src "droid-hal-version-cheeseburger" "$branch" "hybris/droid-hal-version-$device"
 		(( $? == 0 )) && echo " done!" || echo " fail! exit code: $?"
 
 		echo "$device" > "$ANDROID_ROOT/.last_device"
@@ -80,24 +92,11 @@ choose_target() {
 	hadk
 }
 
-gen_ks() {
-	echo '$ HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@"' &&
-	HA_REPO="repo --name=adaptation-community-common-$DEVICE-@RELEASE@" &&
-	echo '$ HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@"' &&
-	HA_DEV="repo --name=adaptation-community-$DEVICE-@RELEASE@" &&
-	echo '$ KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks"' &&
-	KS="Jolla-@RELEASE@-$DEVICE-@ARCH@.ks" &&
-	echo '$ sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS' &&
-	sed "/$HA_REPO/i$HA_DEV --baseurl=file:\/\/$ANDROID_ROOT\/droid-local-repo\/$DEVICE" $ANDROID_ROOT/hybris/droid-configs/installroot/usr/share/kickstarts/$KS > $KS &&
-	echo '$ hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh' &&
-	hybris/droid-configs/droid-configs-device/helpers/process_patterns.sh
-}
-
 build_all_packages() {
 	cd $ANDROID_ROOT
 
 	echo "$ $builder_script $@"
-	$builder_script $@ && gen_ks
+	$builder_script $@
 }
 
 build_packages() {
@@ -110,8 +109,6 @@ build_packages() {
 
 	echo "$ $builder_script $@"
 	$builder_script $@ || return
-	
-	[[ $@ == *"-c"* || $@ == *"--configs"* ]] && gen_ks
 }
 
 run_mic_build() {
@@ -136,7 +133,7 @@ run_mic_build() {
 		if (( $res == 0 )); then
 			# TODO Check if installed tooling is latest available from http://releases.sailfishos.org/sdk/targets/
 
-			# Only use latest tooling if it's actually newer
+			# Only use "latest version" if it's actually newer
 			vercomp "$LATEST_RELEASE" "$RELEASE"
 			res=$?
 			if (( $res == 2 )); then
@@ -161,9 +158,8 @@ run_mic_build() {
 		UPDATES_CHECKED=1
 	fi
 
-	local cmd="sudo mic create fs --arch=$PORT_ARCH --tokenmap=ARCH:$PORT_ARCH,RELEASE:$RELEASE,EXTRA_NAME:$EXTRA_NAME --record-pkgs=name,url --outdir=sfe-$DEVICE-$RELEASE$EXTRA_NAME --pack-to=sfe-$DEVICE-$RELEASE$EXTRA_NAME.tar.bz2 $ANDROID_ROOT/Jolla-@RELEASE@-$DEVICE-@ARCH@.ks"
-	echo "$ $cmd"
-	$cmd
+	# TODO: Add support to build image using OBS KS (devel/testing), do local fixups etc
+	build_packages -i
 }
 
 choose_target

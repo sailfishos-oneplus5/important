@@ -28,7 +28,7 @@ The build guide expects an **x86-64 based Linux environment** for building the S
 When these basic requirements are met, you can move onto the [initial building guide](INITIAL-BUILDING.md) and go on from there. 
 If instead you've already built everything once but want to upgrade or test things, the [regular building guide](BUILDING.md) is what you'd be looking for.
 
-The guide has been built with the help of the [HADK](https://sailfishos.org/develop/hadk/), [FAQ](https://public.etherpad-mozilla.org/p/faq-hadk), [IRC logs](https://piggz.co.uk/sailfishos-porters-archive/index.php) & the awesome people at [#sailfishos-porters](https://webchat.freenode.net/#sailfishos-porters).
+The guide has been built with the help of the [HADK](https://sailfishos.org/develop/hadk/), [FAQ](https://github.com/mer-hybris/hadk-faq), [IRC logs](https://piggz.co.uk/sailfishos-porters-archive/index.php) & the awesome people at [#sailfishos-porters](https://webchat.freenode.net/#sailfishos-porters).
 
 ## Application development
 

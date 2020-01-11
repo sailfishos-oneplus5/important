@@ -7,7 +7,6 @@
 * [Setup the HABUILD SDK](#setup-the-habuild-sdk)
 * [Cleaning up](#cleaning-up)
 * [Initializing local repo](#initializing-local-repo)
-* [Building extra packages](#building-extra-packages)
 
 ## Starting from ground zero
 
@@ -32,7 +31,7 @@ HOST $
 
 mkdir ~/bin
 curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-chmod a+x ~/bin/repo
+chmod +x ~/bin/repo
 ```
 
 ## Setup the Platform SDK
@@ -50,7 +49,7 @@ mkdir -p $ANDROID_ROOT
 sfossdk
 ```
 
-After entering the Platform SDK you get to choose your first target device! I choce `cheeseburger` as that's the only device I own:
+After entering the Platform SDK you get to choose your first target device! I chose `cheeseburger` as that's the only device I own:
 ```
 Which hybris-15.1 device would you like to build for?
 
@@ -67,14 +66,14 @@ When gaining control of the prompt we need to fetch the HADK Android tools for u
 ```
 PLATFORM_SDK $
 
-sudo zypper ref
-sudo zypper --non-interactive in android-tools-hadk bc
+sudo zypper ref -f
+sudo zypper --non-interactive in bc pigz atruncate android-tools-hadk
 ```
 **NOTE:** Repository errors for `adaptation0` can be safely ignored here and in the future.
 
 ## Adding SFOS build target
 
-In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.1.0.12` at the time of writing, the following command should be run:
+In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.2.1.19` at the time of writing, the following command should be run:
 ```
 PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
 ```
@@ -84,7 +83,7 @@ PLATFORM_SDK $ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http:/
 To verify that the install(s) have succeeded, executing `sdk-assistant list` should yield something like this:
 ```
 PLATFORM_SDK $ sdk-assistant list
-SailfishOS-3.1.0.12
+SailfishOS-3.2.1.19
 |-oneplus-cheeseburger-armv7hl
 `-oneplus-dumpling-armv7hl
 ```
@@ -117,7 +116,7 @@ git config --global user.email "your@email.com"
 
 Once you can enter both PLATFORM_SDK and HA_BUILD environments, you can safely delete the leftover chroot filesystem archives from your home directory:
 ```
-HA_BUILD $ cd && rm Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2 ubuntu-trusty-*-android-rootfs.tar.bz2
+HA_BUILD $ cd && rm Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2 ubuntu-*-android-rootfs.tar.bz2
 ```
 
 ## Initializing local repo
@@ -127,38 +126,8 @@ When everything is ready to go we can finally init the local source repository:
 HA_BUILD $
 
 cd $ANDROID_ROOT
-repo init -u git://github.com/mer-hybris/android.git -b hybris-15.1 --depth 1
+repo init -u git://github.com/sailfishos-oneplus5/android.git -b hybris-15.1 --depth 1
 git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-15.1 .repo/local_manifests/
 ```
 
-Now that the repo is initialized you can start [syncing the local repository](BUILDING.md#syncing-local-repository) as per the [regular porting guide](BUILDING.md) as it will be identical from here on out unless otherwise stated.
-
-## Building extra packages
-
-These extra packages are responsible for fixing video recording, working call audio and device specific features such as notification slider & display off gestures. They aren't built by default, so that's why we'll be building them next:
-```
-PLATFORM_SDK $
-
-DROIDMEDIA_VERSION=0.20191011.0
-rpm/dhd/helpers/pack_source_droidmedia-localbuild.sh $DROIDMEDIA_VERSION
-mkdir -p hybris/mw/droidmedia-localbuild/rpm
-cp rpm/dhd/helpers/droidmedia-localbuild.spec hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
-sed "s/0.0.0/$DROIDMEDIA_VERSION/" -i hybris/mw/droidmedia-localbuild/rpm/droidmedia.spec
-mv hybris/mw/droidmedia-$DROIDMEDIA_VERSION.tgz hybris/mw/droidmedia-localbuild
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/droidmedia-localbuild
-rpm/dhd/helpers/build_packages.sh --mw=https://github.com/sailfishos/gst-droid.git
-
-AUDIOFLINGERGLUE_VERSION=0.0.13
-rpm/dhd/helpers/pack_source_audioflingerglue-localbuild.sh $AUDIOFLINGERGLUE_VERSION
-mkdir -p hybris/mw/audioflingerglue-localbuild/rpm
-cp rpm/dhd/helpers/audioflingerglue-localbuild.spec hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
-sed "s/0.0.0/$AUDIOFLINGERGLUE_VERSION/" -i hybris/mw/audioflingerglue-localbuild/rpm/audioflingerglue.spec
-mv hybris/mw/audioflingerglue-$AUDIOFLINGERGLUE_VERSION.tgz hybris/mw/audioflingerglue-localbuild
-rpm/dhd/helpers/build_packages.sh -b hybris/mw/audioflingerglue-localbuild
-rpm/dhd/helpers/build_packages.sh --mw=https://github.com/mer-hybris/pulseaudio-modules-droid-glue.git
-
-build_device_configs
-```
-**NOTE:** Please substitute [DROIDMEDIA_VERSION](https://git.io/fjMe2) and [AUDIOFLINGERGLUE_VERSION](https://git.io/JeG4v) values with their latest versions if they are different.
-
-Once you're done you can check out [building the SFOS rootfs](BUILDING.md#building-the-sfos-rootfs) over on the [regular building guide](BUILDING.md).
+Now that the repo is initialized you can start [syncing the local repository](BUILDING.md#syncing-local-repository) as per the [regular porting guide](BUILDING.md).

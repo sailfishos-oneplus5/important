@@ -5,7 +5,7 @@
 * [Unlocking the device](#unlocking-the-device)
 * [Downgrading firmware & TWRP](#downgrading-firmware-twrp)
 * [Flashing steps](#flashing-steps)
-* [Skipping tutorial](#skipping-tutorial)
+* [Skipping the tutorial](#skipping-the-tutorial)
 * [Dual-booting with LineageOS](#dual-booting-with-lineageos)
 
 ## Disclaimer
@@ -43,16 +43,16 @@ ADB_SHELL # e2fsck /dev/block/bootdevice/by-name/userdata
 1. Clear data & caches (factory reset)
 2. Flash [the latest LineageOS 15.1 zip for your device from here](https://mega.nz/#F!W9MyDAJJ!riJ5okLw5CVZlqWoTVC_1g) (tested and known to work)
 3. (Optional) Flash whatever else you normally have on the Android side (e.g. [OpenGApps](https://opengapps.org/), [Magisk](https://forum.xda-developers.com/apps/magisk/official-magisk-v7-universal-systemless-t3473445/), [disable dm_verity & force-encrypt](https://zackptg5.com/android.php#disverfe) etc)
-4. Flash [your desired SFOS zip](https://mega.nz/#F!KhsWGYzT!nKLttGqwJg0DY-IArUlbdQ) (normally takes ~1 min 30 sec)
+4. Flash your desired `sailfishos-*.zip` from the pipeline artifacts ([OP5 / cheeseburger](https://gitlab.com/sailfishos-porters-ci/cheeseburger-ci/pipelines?scope=tags) | [OP5T / dumpling](https://gitlab.com/sailfishos-porters-ci/dumpling-ci/pipelines?scope=tags)); normally takes ~1 min 30 sec)
 5. Reboot
 
-## Skipping tutorial
+## Skipping the tutorial
 
 Once booted for the first time Sailfish OS will always start off with a tutorial screen. Since you'll likely be flashing zips many times, this will become very annoying rather quickly. You can skip this by tapping each corner of the screen once starting from top-left going clockwise.
 
 ## Dual-booting with LineageOS
 
-What makes SFOS unique as well is that it doesn't actually touch your `/system` partition (and `/vendor` once I figure stuff out :p), which makes it super easy to dual-boot!
+What makes SFOS unique as well is that it doesn't actually touch your `/system` or `/vendor` partitions, which makes it super easy to dual-boot!
 
 The only limitation is that you'll be stuck on LOS 15.1 (Android 8.1 Oreo) unless you want to start flashing different ROMs, firmware & TWRP versions for when you boot SFOS rather than Android, which I really cannot recommend.
 
