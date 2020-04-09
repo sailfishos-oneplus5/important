@@ -26,6 +26,8 @@ You can think of `telnet` as a replacement for the [ADB](https://developer.andro
 HOST $ telnet 192.168.2.15 2323
 ```
 
+**NOTE:** This only works on local debugging builds!
+
 ## Debugging via SSH
 
 Remote debugging is possible via SSH on a local Wi-Fi network. It should be running by default on developer mode, but you'll need some setup:
@@ -47,7 +49,7 @@ HOST $ ssh nemo@192.168.1.105
 nemo@192.168.1.105's password: 
 Last login: Sun Jul  7 12:16:15 2019
 ,---
-| Sailfish OS 3.2.1.20 (Nuuksio)
+| Sailfish OS 3.3.0.14 (Rokua)
 '---
 [nemo@Sailfish ~]$
 ```
