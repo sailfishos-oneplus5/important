@@ -42,7 +42,7 @@ HOST $
 
 exec bash
 sudo mkdir -p $PLATFORM_SDK_ROOT/{targets,toolings,sdks/sfossdk}
-sudo ln -s /srv/mer/sdks/sfossdk/srv/mer/sdks/ubuntu/ /srv/mer/sdks/ubuntu
+sudo ln -s $PLATFORM_SDK_ROOT/sdks/sfossdk/$PLATFORM_SDK_ROOT/sdks/ubuntu/ $PLATFORM_SDK_ROOT/sdks/ubuntu
 cd && curl -k -O http://releases.sailfishos.org/sdk/installers/latest/Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2
 sudo tar --numeric-owner -p -xjf Jolla-latest-SailfishOS_Platform_SDK_Chroot-i486.tar.bz2 -C $PLATFORM_SDK_ROOT/sdks/sfossdk
 mkdir -p $ANDROID_ROOT
@@ -80,6 +80,7 @@ PLATFORM_SDK $
 sed -i '1iexport RELEASE="3.3.0.14"' ~/.hadk.env
 . ~/.hadk.env
 cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
+sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -m sdk-install -R chmod 755 /boot
 ```
 
 **NOTE:** You can add an entry for another device model by simply choosing it when entering Platform SDK again and installing another target!
@@ -104,7 +105,7 @@ UBUNTU_CHROOT=$PLATFORM_SDK_ROOT/sdks/ubuntu
 sudo mkdir -p $UBUNTU_CHROOT
 sudo tar --numeric-owner -xjf $TARBALL -C $UBUNTU_CHROOT
 sudo sed "s/\tlocalhost/\t$(</parentroot/etc/hostname)/g" -i $UBUNTU_CHROOT/etc/hosts
-cd $ANDROID_ROOT
+croot
 habuild
 ```
 
@@ -129,7 +130,7 @@ When everything is ready to go we can finally init the local source repository:
 ```
 HA_BUILD $
 
-cd $ANDROID_ROOT
+croot
 repo init -u git://github.com/sailfishos-oneplus5/android.git -b hybris-16.0 --depth 1
 git clone https://github.com/sailfishos-oneplus5/local_manifests -b hybris-16.0 .repo/local_manifests/
 ```
