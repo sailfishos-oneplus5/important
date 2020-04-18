@@ -78,7 +78,7 @@ In the Platform SDK we use Scratchbox to build packages for the target device ar
 PLATFORM_SDK $
 
 sed -i '1iexport RELEASE="3.3.0.14"' ~/.hadk.env
-. ~/.hadk.env
+source ~/.hadk.env
 cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
 sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -m sdk-install -R chmod 755 /boot
 ```
