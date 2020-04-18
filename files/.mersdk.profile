@@ -1,9 +1,14 @@
 builder_script="rpm/dhd/helpers/build_packages.sh"
+[ -f "$ANDROID_ROOT/.last_device" ] && last_device="$(<$ANDROID_ROOT/.last_device)"
 [ -d /etc/bash_completion.d ] && for i in /etc/bash_completion.d/*; do . $i; done
+
 export PS1="PLATFORM_SDK $PS1"
 export HISTFILE="$HOME/.bash_history-sfossdk"
 export RELEASE=`cat /etc/os-release | grep VERSION_ID | cut -d"=" -f2`
 
+sdk_prompt() { echo "$1: enter HA_BUILD env first by typing 'ha_build' & try again (or override with '\\$@')!"; }
+alias make="sdk_prompt make"
+alias mka="sdk_prompt mka"
 alias host="exit"
 alias ha_build="ubu-chroot -r $PLATFORM_SDK_ROOT/sdks/ubuntu"
 alias habuild="ha_build"
@@ -22,11 +27,13 @@ alias build_sfos="run_mic_build"
 alias build_sailfish="run_mic_build"
 alias build_img="run_mic_build"
 alias build_image="run_mic_build"
-alias reset_droid_repos="sudo rm -rf $ANDROID_ROOT/rpm/ $ANDROID_ROOT/hybris/droid-{configs,hal-version-$DEVICE}* $ANDROID_ROOT/droid-hal-$DEVICE.log $ANDROID_ROOT/.last_device; unset last_device; choose_target"
+alias reset_droid_repos="cd '$ANDROID_ROOT' && sudo rm -rf rpm/ hybris/droid-{configs,hal-version-}* .last_device .first_*_build_done documentation.list droid-hal-*.log Jolla-*.ks; cd - > /dev/null; unset last_device DEVICE VENDOR; echo 'Discarded local droid-* repo clones & related files for all devices!'; choose_target"
 alias reset_repos="reset_droid_repos"
 alias choose_device="choose_target"
 alias switch_target="choose_target"
 alias switch_device="choose_target"
+alias update_device="choose_target"
+alias croot="cd '$ANDROID_ROOT'"
 
 hadk() {
 	echo
@@ -58,7 +65,6 @@ choose_target() {
 	[ "$target" = "2" ] && device="dumpling"
 	branch="master"
 	[ "$device" = "dumpling" ] && branch="dumpling"
-	[ -f "$ANDROID_ROOT/.last_device" ] && last_device="$(<$ANDROID_ROOT/.last_device)"
 
 	if [ "$device" != "$last_device" ]; then
 		if [ ! -z "$last_device" ]; then
@@ -70,8 +76,8 @@ choose_target() {
 				return 1
 			fi
 
+			rm -rf "$ANDROID_ROOT"/rpm* "$ANDROID_ROOT"/hybris/droid-{configs,hal-version-}*
 			echo "Discarded local droid HAL & configs for $last_device!"
-			rm -rf $ANDROID_ROOT/rpm* $ANDROID_ROOT/hybris/droid-{configs,hal-version-}*
 		fi
 
 		printf "Cloning droid HAL & configs for $device..."
@@ -94,14 +100,14 @@ choose_target() {
 }
 
 build_all_packages() {
-	cd $ANDROID_ROOT
+	cd "$ANDROID_ROOT"
 
 	echo "$ $builder_script $@"
 	$builder_script $@
 }
 
 build_packages() {
-	cd $ANDROID_ROOT
+	cd "$ANDROID_ROOT"
 
 	if (( $# == 0 )); then
 		build_packages -c
@@ -162,4 +168,7 @@ run_mic_build() {
 	build_packages -i
 }
 
-choose_target
+[ -z "$last_device" ] && choose_target || hadk
+echo ">> You may update sources or build for another device using 'update_device'"
+echo ">> To erase local copies of droid-* repos you can run 'reset_droid_repos'"
+echo ">> Entering \"\$ANDROID_ROOT\" anytime can be achieved with 'croot'"

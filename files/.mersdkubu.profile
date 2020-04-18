@@ -1,5 +1,7 @@
 hadk() { source $HOME/.hadk.env; echo "Env setup for $DEVICE"; }
 export PS1="HABUILD_SDK [\${DEVICE}] $PS1"
+export HISTFILE="$HOME/.bash_history-habuild"
+export TOP="$ANDROID_ROOT"
 hadk
 
 sdk_prompt() { echo "$1: enter PLATFORM_SDK first by pressing CTRL + D & try again!"; }
@@ -11,8 +13,6 @@ alias platform_sdk="exit"
 alias plat_sdk="exit"
 alias platformsdk="exit"
 alias platsdk="exit"
-
-export HISTFILE="$HOME/.bash_history-habuild"
 
 if [ -f build/envsetup.sh ]; then
 	echo "$ source build/envsetup.sh"
