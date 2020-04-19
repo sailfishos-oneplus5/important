@@ -13,6 +13,7 @@ alias platform_sdk="exit"
 alias plat_sdk="exit"
 alias platformsdk="exit"
 alias platsdk="exit"
+[[ ! -x `command -v croot` ]] && alias croot="cd '$ANDROID_ROOT'"
 
 if [ -f build/envsetup.sh ]; then
 	echo "$ source build/envsetup.sh"
