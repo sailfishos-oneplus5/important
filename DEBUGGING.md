@@ -21,12 +21,27 @@ I've also noticed some other e.g. `unofficial` LineageOS builds causing this beh
 
 ## Getting telnet
 
-You can think of `telnet` as a replacement for the [ADB](https://developer.android.com/studio/command-line/adb) shell. On the host a telnet session can be started by typing:
+You can think of `telnet` as a replacement for the [ADB](https://developer.android.com/studio/command-line/adb) shell. On the host (assuming the device is connected via USB using developer mode) a telnet session can be started by typing:
 ```
 HOST $ telnet 192.168.2.15 2323
 ```
 
-**NOTE:** This only works on local debugging builds!
+**NOTE:** On production builds `telnet` connections are blocked by default using the file `/init_disable_telnet`! Remove this and reboot if you intend to bring up `telnetd` on the device during init.
+
+Starting the `telnet` daemon temporarily from the device is also possible using the following:
+```
+DEVICE # busybox-static telnetd -b 192.168.2.15:2323 -l /bin/sh &
+```
+
+If the connection still doesn't work you may have to manually assign an IP address for the device from your host like so:
+```
+HOST #
+
+ip address                     # find device interface name to use below, example: enp40s0f3u4u1
+DEV="enp40s0f3u4u1"
+ip address add 192.168.2.20 dev $DEV
+ip route add 192.168.2.15 dev $DEV
+```
 
 ## Debugging via SSH
 
