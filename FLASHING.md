@@ -30,7 +30,7 @@ Check out [this forum post](https://forums.oneplus.com/threads/guide-oneplus-5-h
 
 When using Sailfish OS the current port expects the phone to have Android 9 Pie firmware.
 
-1. Fetch the files for latest O<sub>2</sub>OS 9.0.11 firmware ([OP5 / cheeseburger](https://sourceforge.net/projects/crdroid/files/cheeseburger/6.x/firmware/firmware_9.0.11_oneplus5.zip/download) | [OP5T / dumpling](https://sourceforge.net/projects/crdroid/files/dumpling/6.x/firmware/firmware_9.0.11_oneplus5T.zip/download)) and a TWRP >=3.3.x image ([OP5 / cheeseburger](https://dl.twrp.me/cheeseburger/twrp-3.3.1-0-cheeseburger.img) | [OP5T / dumpling](https://dl.twrp.me/dumpling/twrp-3.3.1-0-dumpling.img)).
+1. Fetch the files for latest O<sub>2</sub>OS 9.0.11 firmware ([OP5 / cheeseburger](https://sourceforge.net/projects/crdroid/files/cheeseburger/6.x/firmware/firmware_9.0.11_oneplus5.zip/download) | [OP5T / dumpling](https://sourceforge.net/projects/crdroid/files/dumpling/6.x/firmware/firmware_9.0.11_oneplus5T.zip/download)) and a [TWRP >=3.3.x image](https://dl.twrp.me/cheeseburger_dumpling/twrp-3.4.0-0-cheeseburger_dumpling.img.html).
 2. Flash the firmware zip first and then TWRP image to Recovery partition.
 3. First time flashers should also check `/data` for filesystem issues (make sure it's **unmounted** & formatted as **`ext4`** beforehand!):
 ```

@@ -48,14 +48,17 @@ HA_BUILD $ hybris-patches/apply-patches.sh --mb && . build/envsetup.sh && breakf
 
 Now we will build the required parts of LineageOS for HAL to function properly under SFOS. This usually takes around 9 minutes on 16 Zen 2 threads (R7 3700X) for the first time. To start the process, enter:
 ```
-HA_BUILD $ mka hybris-hal
+HA_BUILD $
+
+rm -rf vendor/lineage/bootanimation/
+mka hybris-hal
 ```
 
 **NOTE:** If this was your first time building the droid HAL side, the following needs to be also executed for working camera, video playback & recording etc; this shouldn't take very long:
 ```
 echo "MINIMEDIA_AUDIOPOLICYSERVICE_ENABLE := 1" > external/droidmedia/env.mk
-sed "s/Werror/Werror -Wno-unused-parameter/" -i frameworks/av/services/camera/libcameraservice/Android.mk
-mka droidmedia
+mka droidmedia libbiometry_fp_api_32
+hybris/mw/sailfish-fpd-community/rpm/copy-hal.sh
 ```
 
 During the `hybris-hal` build process `hybris-*.img` boot images in `out/target/product/$DEVICE/` will be generated. When kernel and other Android side changes are done afterwards the image can be regenerated using:
@@ -70,7 +73,7 @@ To pull updates and start (re)building all locally required SFOS packages & the 
 PLATFORM_SDK $ build_all_packages
 ```
 
-As the rootfs `mic` build command line is now included in `build_packages.sh` steps, this is all you need to get a rather tiny (~340 MB) flashable SFOS zip file! Look into the [flashing guide](FLASHING.md) on how to proceed afterwards.
+As the rootfs `mic` build command line is now included in `build_packages.sh` steps, this is all you need to get a rather tiny (~380 MB) flashable SFOS zip file! Look into the [flashing guide](FLASHING.md) on how to proceed afterwards.
 
 When just droid configs have been modified, `build_device_configs` will be enough. Same goes for droid HAL stuff with `build_droid_hal` instead. Building with these commands instead will be substantially faster than rebuilding everything (which is unnecessary 99% of the time anyways).
 

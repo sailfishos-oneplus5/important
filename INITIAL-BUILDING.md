@@ -67,17 +67,16 @@ When gaining control of the prompt we need to fetch the HADK Android tools for u
 PLATFORM_SDK $
 
 sudo zypper ref -f
-sudo zypper --non-interactive in bc pigz atruncate android-tools-hadk
+sudo zypper --non-interactive in bc pigz atruncate android-tools-hadk kmod
 ```
 **NOTE:** Repository errors for `adaptation0` can be safely ignored here and in the future.
 
 ## Adding SFOS build target
 
-In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.3.0.16` at the time of writing, the following command should be run:
+In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.4.0.24` at the time of writing, the following command should be run:
 ```
-PLATFORM_SDK $
+PLATFORM_SDK $ 
 
-sed -i '1iexport RELEASE="3.3.0.16"' ~/.hadk.env
 source ~/.hadk.env
 cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Target-$PORT_ARCH.tar.7z --tooling SailfishOS-$RELEASE --tooling-url http://releases.sailfishos.org/sdk/targets/Sailfish_OS-$RELEASE-Sailfish_SDK_Tooling-i486.tar.7z
 ```
@@ -87,7 +86,7 @@ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailf
 To verify that the install(s) have succeeded, executing `sdk-assistant list` should yield something like this:
 ```
 PLATFORM_SDK $ sdk-assistant list
-SailfishOS-3.3.0.16
+SailfishOS-3.4.0.24
 |-oneplus-cheeseburger-armv7hl
 `-oneplus-dumpling-armv7hl
 ```
@@ -114,6 +113,7 @@ HA_BUILD $
 
 git config --global user.name "Your Name"
 git config --global user.email "your@email.com"
+git config --global color.ui "auto"
 ```
 
 ## Cleaning up

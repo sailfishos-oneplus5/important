@@ -1,6 +1,7 @@
 # Debugging guide
 
 ### Table of Contents
+* [Notice about default user](#notice-about-default-user)
 * [Device reboots to fastboot](#device-reboots-to-fastboot)
 * [Can't get past setup / lockscreen](#cant-get-past-setup-lockscreen)
 * [Getting telnet](#getting-telnet)
@@ -8,6 +9,12 @@
 * [Stracing binaries](#stracing-binaries)
 * [Gathering logs](#gathering-logs)
 * [Transferring logs](#transferring-logs)
+
+## Notice about default user
+
+Since Sailfish OS 3.4.0 (Pallas-Yllästunturi) the installation default user has become `defaultuser` where in all previous versions it has been `nemo`.
+
+In case you upgraded to/past this version from a previous build where the user was still `nemo`, your user is still `nemo` and it should be used in all cases where `defaultuser` is now mentioned in this guide.
 
 ## Device reboots to fastboot
 
@@ -47,10 +54,10 @@ ip route add 192.168.2.15 dev $DEV
 
 Remote debugging is possible via SSH on a local Wi-Fi network. It should be running by default on developer mode, but you'll need some setup:
 ```
-TELNET # passwd nemo
+TELNET # passwd defaultuser
 ```
 
-Once a password has been set for the regular user `nemo`, you need to get the IP address of the device:
+Once a password has been set for the regular user `defaultuser`, you need to get the IP address of the device:
 ```
 TELNET # ip a | grep wlan0
 23: wlan0: <BROADCAST,MULTICAST,DYNAMIC,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 3000
@@ -60,22 +67,22 @@ TELNET # ip a | grep wlan0
 
 In this case the device's IP is `192.168.1.105` and I can SSH in like so:
 ```
-HOST $ ssh nemo@192.168.1.105
-nemo@192.168.1.105's password: 
-Last login: Sun Jul  7 12:16:15 2019
+HOST $ ssh defaultuser@192.168.1.105
+defaultuser@192.168.1.105's password: 
+Last login: Fri Nov 20 21:36:06 2020
 ,---
-| Sailfish OS 3.3.0.16 (Rokua)
+| Sailfish OS 3.4.0.24 (Pallas-Yllästunturi)
 '---
-[nemo@Sailfish ~]$
+[defaultuser@Sailfish ~]$
 ```
 
 To gain root access via SSH the following needs to be used (in some regards the command works like `sudo`):
 ```
-[nemo@Sailfish ~]$ devel-su
+[defaultuser@Sailfish ~]$ devel-su
 Password:
-[root@Sailfish nemo]#
+[root@Sailfish defaultuser]#
 ```
-**NOTE:** Prompts below starting with `#` are meant to be run as `root` and similarly ones starting with `$` are meant to be run as the user `nemo`!
+**NOTE:** Prompts below starting with `#` are meant to be run as `root` and similarly ones starting with `$` are meant to be run as the user `defaultuser`!
 
 ## Stracing binaries
 
@@ -120,8 +127,8 @@ Starting from Android 9 Pie based ports, you can now just enable & use MTP like 
 
 If SSH access was enabled previously the logs can also be transferred via the command line:
 ```
-HOST $ scp nemo@192.168.1.105:/sdcard/*.log .
-nemo@192.168.1.105's password: 
+HOST $ scp defaultuser@192.168.1.105:/sdcard/*.log .
+defaultuser@192.168.1.105's password: 
 dmesg.log                                                    100% 2003KB  14.0MB/s   00:00
 journalctl.log                                               100%  905KB  11.6MB/s   00:00
 logcat.log                                                   100%  491KB   9.6MB/s   00:00
