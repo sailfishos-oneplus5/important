@@ -39,7 +39,7 @@ HA_BUILD $ repo sync -c -j`nproc` --fetch-submodules --no-clone-bundle --no-tags
 
 If this is your first time building, execute the following line to finalize the environment:
 ```
-HA_BUILD $ hybris-patches/apply-patches.sh --mb && . build/envsetup.sh && breakfast $DEVICE && export USE_CCACHE=1
+HA_BUILD $ hybris-patches/apply-patches.sh --mb && . build/envsetup.sh && breakfast $DEVICE
 ```
 
 **NOTE:** It's possible and **required before syncing again** to use `repo sync -l` to reset your cloned repos to their pre-patch states, however at the cost of losing **any and all** local-only changes!

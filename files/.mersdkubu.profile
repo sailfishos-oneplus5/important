@@ -20,6 +20,4 @@ if [ -f build/envsetup.sh ]; then
 	source build/envsetup.sh
 	echo "$ breakfast $DEVICE"
 	breakfast $DEVICE
-	echo "$ export USE_CCACHE=1"
-	export USE_CCACHE=1
 fi
