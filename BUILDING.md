@@ -68,9 +68,29 @@ HA_BUILD $ mka hybris-boot
 
 ## Building SFOS packages & rootfs<a name="building-sfos-packages-rootfs"></a>
 
+Before beginning, run the following to avoid a few errors while building and pulling repo updates:
+```
+croot
+cd external/libhybris
+git checkout master
+cd -
+cd hybris/mw/sailfish-fpd-community
+git checkout master
+cd -
+```
+
 To pull updates and start (re)building all locally required SFOS packages & the rootfs, run the following command (full build takes ~20 minutes for me):
 ```
 PLATFORM_SDK $ build_all_packages
+```
+
+For now here's also a temporary "fix" for `repo problem: nothing provides sailfish-fpd-community needed by pattern:jolla-configuration-...`:
+```
+croot
+cp droid-local-repo/$DEVICE/sailfish-fpd-community/droid-*.rpm /tmp
+bp -b hybris/mw/sailfish-fpd-community -s rpm/sailfish-fpd-community.spec
+mv /tmp/droid-*.rpm droid-local-repo/$DEVICE/sailfish-fpd-community/
+bp -vi
 ```
 
 As the rootfs `mic` build command line is now included in `build_packages.sh` steps, this is all you need to get a rather tiny (~380 MB) flashable SFOS zip file! Look into the [flashing guide](FLASHING.md) on how to proceed afterwards.
