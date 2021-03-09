@@ -73,7 +73,7 @@ sudo zypper --non-interactive in bc pigz atruncate android-tools-hadk kmod
 
 ## Adding SFOS build target
 
-In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `3.4.0.24` at the time of writing, the following command should be run:
+In the Platform SDK we use Scratchbox to build packages for the target device architecture. Releases for the SDK targets can be found [here](http://releases.sailfishos.org/sdk/targets/) if another version is desired. To build against the latest public release e.g. `4.0.1.48` at the time of writing, the following command should be run:
 ```
 PLATFORM_SDK $ 
 
@@ -86,7 +86,7 @@ cd && sdk-manage target install $VENDOR-$DEVICE-$PORT_ARCH http://releases.sailf
 To verify that the install(s) have succeeded, executing `sdk-assistant list` should yield something like this:
 ```
 PLATFORM_SDK $ sdk-assistant list
-SailfishOS-3.4.0.24
+SailfishOS-4.0.1.48
 |-oneplus-cheeseburger-armv7hl
 `-oneplus-dumpling-armv7hl
 ```

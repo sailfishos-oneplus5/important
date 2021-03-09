@@ -71,7 +71,7 @@ HOST $ ssh defaultuser@192.168.1.105
 defaultuser@192.168.1.105's password: 
 Last login: Fri Nov 20 21:36:06 2020
 ,---
-| Sailfish OS 3.4.0.24 (Pallas-Yllästunturi)
+| Sailfish OS 4.0.1.48 (Koli)
 '---
 [defaultuser@Sailfish ~]$
 ```
