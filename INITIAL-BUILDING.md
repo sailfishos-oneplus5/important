@@ -87,8 +87,8 @@ To verify that the install(s) have succeeded, executing `sdk-assistant list` sho
 ```
 PLATFORM_SDK $ sdk-assistant list
 SailfishOS-4.0.1.48
-|-oneplus-cheeseburger-armv7hl
-`-oneplus-dumpling-armv7hl
+|-oneplus-cheeseburger-aarch64
+`-oneplus-dumpling-aarch64
 ```
 
 ## Setup the HABUILD SDK

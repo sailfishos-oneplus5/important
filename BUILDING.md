@@ -57,7 +57,7 @@ mka hybris-hal
 **NOTE:** If this was your first time building the droid HAL side, the following needs to be also executed for working camera, video playback & recording etc; this shouldn't take very long:
 ```
 echo "MINIMEDIA_AUDIOPOLICYSERVICE_ENABLE := 1" > external/droidmedia/env.mk
-mka droidmedia libbiometry_fp_api_32
+mka droidmedia libbiometry_fp_api
 hybris/mw/sailfish-fpd-community/rpm/copy-hal.sh
 ```
 
