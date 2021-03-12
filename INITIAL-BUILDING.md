@@ -36,7 +36,7 @@ chmod +x ~/bin/repo
 
 ## Setup the Platform SDK
 
-Here's where the magic magic happens in terms of building Sailfish OS itself. To set it up we need to create some initial directories for the SUSE based Platform SDK chroot and extract it:
+Here's where the magic happens in terms of building Sailfish OS itself. To set it up we need to create some initial directories for the SUSE based Platform SDK chroot and extract it:
 ```
 HOST $
 
