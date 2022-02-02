@@ -5,7 +5,7 @@ A collective repository for all the important things related to this SFOS port.
 
 [Sailfish OS](https://sailfishos.org/) (often abbreviated as SFOS) is an independent and mature mobile Linux distribution focused on privacy and security. It provides a true alternative to the dominant mobile operating systems such as Google's Android and Apple's iOS. For example [it is being adopted by the Russian government](https://techcrunch.com/2016/11/29/jollas-sailfish-os-now-certified-as-russias-first-android-alternative/) for it's secure nature.
 
-My ultimate goal with this project is to port Sailfish OS to the [OnePlus 5](https://www.gsmarena.com/oneplus_5-8647.php) (and maybe later [5T](https://www.gsmarena.com/oneplus_5t-8912.php) with unified builds).
+My ultimate goal with this project is to port Sailfish OS to the [OnePlus 5](https://www.gsmarena.com/oneplus_5-8647.php) and [5T](https://www.gsmarena.com/oneplus_5t-8912.php).
 
 ## Issues
 
@@ -23,12 +23,11 @@ Once you've got everything built or are flashing a release build, check out the 
 
 ## Building from source
 
-The build guide expects an **x86-64 based Linux environment** for building the Sailfish OS source code, related packages and LineageOS HAL side + around **50 GB of free space** on top of that to comfortably build everything without issues. Also **4+ GB of RAM** is required: the more the better.
+The build guide expects an **x86-64 based Linux environment** for building the Sailfish OS source code, related packages and LineageOS HAL side + around **60 GB of free space** on top of that to comfortably build everything without issues. Also **4+ GB of RAM** is required: the more the better.
 
-When these basic requirements are met, you can move onto the [initial building guide](INITIAL-BUILDING.md) and go on from there. 
-If instead you've already built everything once but want to upgrade or test things, the [regular building guide](BUILDING.md) is what you'd be looking for.
+When these basic requirements are met, you can move onto the [sfbootstrap quick start docs](https://github.com/JamiKettunen/sfbootstrap#quick-start) and go on from there.
 
-The guide has been built with the help of the [HADK](https://sailfishos.org/develop/hadk/), [FAQ](https://github.com/mer-hybris/hadk-faq), [IRC logs](https://piggz.co.uk/sailfishos-porters-archive/index.php) & the awesome people at [#sailfishos-porters](https://webchat.freenode.net/#sailfishos-porters).
+The guide has been built with the help of the [HADK](https://sailfishos.org/develop/hadk/), [FAQ](https://github.com/mer-hybris/hadk-faq), [IRC logs](https://piggz.co.uk/sailfishos-porters-archive/index.php), [sfbootstrap](https://github.com/JamiKettunen/sfbootstrap) & the awesome people at [#sailfishos-porters](https://web.libera.chat/#sailfishos-porters).
 
 ## Application development
 
