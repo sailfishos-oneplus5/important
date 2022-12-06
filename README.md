@@ -1,3 +1,6 @@
+# LOOKING FOR NEW PORT MAINTAINERS
+See https://github.com/sailfishos-oneplus5/important/issues/9 for more details.
+
 # Important
 A collective repository for all the important things related to this SFOS port.
 
